@@ -87,15 +87,6 @@ public class WeatherService extends AsyncTask<TaskParams, Void, String>
         {
             e.printStackTrace();
         }
-
-        //JSONObject queryResults = data.optJSONObject("query");
-            /*int count = queryResults.optInt("count");
-
-            if (count == 0)
-            {
-                callback.serviceFailure(new LocationWeatherException("No information available"));
-                return;
-            }*/
     }
 }
 

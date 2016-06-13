@@ -22,6 +22,9 @@ public class MainActivity extends AppCompatActivity implements WeatherServiceCal
     private TextView GPSTextView;
     private TextView locationTextView;
     private TextView temperatureTextView;
+    private TextView pressureTextView, humidityTextView, tempMaxTextView, tempMinTextView,
+    groupDescTextView, descriptionTextView, cloudsTextView, rainTextView, snowTextView,
+            windSpeedTextView, windAngleTextView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,6 +35,17 @@ public class MainActivity extends AppCompatActivity implements WeatherServiceCal
         GPSTextView = (TextView) findViewById(R.id.GPSTextView);
         locationTextView = (TextView) findViewById(R.id.locationTextView);
         temperatureTextView = (TextView) findViewById(R.id.temperatureTextView);
+        pressureTextView = (TextView) findViewById(R.id.pressureTextView);
+        humidityTextView = (TextView) findViewById(R.id.humidityTextView);
+        tempMaxTextView = (TextView) findViewById(R.id.tempMaxTextView);
+        tempMinTextView = (TextView) findViewById(R.id.tempMinTextView);
+        groupDescTextView = (TextView) findViewById(R.id.groupDescTextView);
+        descriptionTextView = (TextView) findViewById(R.id.descriptionTextView);
+        cloudsTextView = (TextView) findViewById(R.id.cloudsTextView);
+        rainTextView = (TextView) findViewById(R.id.rainTextView);
+        snowTextView = (TextView) findViewById(R.id.snowTextView);
+        windSpeedTextView = (TextView) findViewById(R.id.windSpeedTextView);
+        windAngleTextView = (TextView) findViewById(R.id.windAngleTextView);
 
         progressDialog = new ProgressDialog(this);
         progressDialog.setMessage("Acquiring data...");
@@ -49,7 +63,18 @@ public class MainActivity extends AppCompatActivity implements WeatherServiceCal
         progressDialog.hide();
         GPSTextView.setText(GPS.getLatitude() + ", " + GPS.getLongitude());
         locationTextView.setText(parameters.getCityName());
-        temperatureTextView.setText(parameters.getMain().getTemperature() + " C");
+        temperatureTextView.setText("Temperature: " + parameters.getMain().getTemperature() + " C");
+        pressureTextView.setText("Pressure: " + parameters.getMain().getPressure() + " hPa");
+        humidityTextView.setText("Humidity: " + parameters.getMain().getHumidity() + "%");
+        tempMaxTextView.setText("Max temp: " + parameters.getMain().getTemp_max() + " C");
+        tempMinTextView.setText("Min temp: " + parameters.getMain().getTemp_min() + " C");
+        groupDescTextView.setText(parameters.getWeather().getGroupParameters());
+        descriptionTextView.setText(parameters.getWeather().getDescription());
+        cloudsTextView.setText("Cloudiness: " + parameters.getClouds().getCloudiness());
+        rainTextView.setText("Rain in last 3 hours: " + parameters.getRain().getLast3H());
+        snowTextView.setText("Snow in last 3 hours: " + parameters.getSnow().getLast3H());
+        windSpeedTextView.setText("Wind speed: " + parameters.getWind().getSpeed() + " m/s");
+        windAngleTextView.setText("Wind angle: " + parameters.getWind().getDegrees() + " degrees");
     }
 
     @Override
