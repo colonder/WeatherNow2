@@ -32,12 +32,12 @@ public class Parameters implements JSONPopulator {
         sys = new Sys();
 
         coordinations.poopulate(jsonObject.optJSONObject("coord"));
-        weather.poopulate(jsonObject.optJSONObject("weather"));
+        //weather.poopulate(jsonObject.optJSONObject("weather"));
         main.poopulate(jsonObject.optJSONObject("main"));
         wind.poopulate(jsonObject.optJSONObject("wind"));
         clouds.poopulate(jsonObject.optJSONObject("clouds"));
         rain.poopulate(jsonObject.optJSONObject("rain"));
-        snow.poopulate(jsonObject.optJSONObject("snow"));
+        //snow.poopulate(jsonObject.optJSONObject("snow"));
         calcTime = jsonObject.optLong("dt");
         sys.poopulate(jsonObject.optJSONObject("sys"));
         cityID = jsonObject.optLong("id");
