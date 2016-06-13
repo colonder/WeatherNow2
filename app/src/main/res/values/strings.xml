@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">WeatherNow2</string>
+    <string name="google_maps_key">AIzaSyBE96x2gPbRlrKSmw_Leh45qxPceLxD6Uk</string>
+</resources>
