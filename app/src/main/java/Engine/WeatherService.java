@@ -38,7 +38,7 @@ public class WeatherService extends AsyncTask<TaskParams, Void, String>
         {
             URL url = new URL("http://api.openweathermap.org/data/2.5/weather?lat=" +
                     params[0].getLat()+ "&lon=" + params[0].getLon() +
-                    "&appid=10660a09a9fb335d72f576f7aa1bbe5b");
+                    "&appid=10660a09a9fb335d72f576f7aa1bbe5b&units=metric");
             URLConnection connection = url.openConnection();
             InputStream inputStream =connection.getInputStream();
             BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));

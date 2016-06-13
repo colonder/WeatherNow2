@@ -10,7 +10,8 @@ public class Rain implements JSONPopulator {
     private int last3H;
 
     @Override
-    public void poopulate(JSONObject jsonObject) {
+    public void poopulate(JSONObject jsonObject)
+    {
         last3H = jsonObject.optInt("3h");
     }
 

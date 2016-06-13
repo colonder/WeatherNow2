@@ -23,7 +23,7 @@ public class Parameters implements JSONPopulator {
     public void poopulate(JSONObject jsonObject)
     {
         coordinations = new Coordinations();
-        weather = new Weather();
+        weather = new Weather(jsonObject.optString("weather"));
         main = new Main();
         wind = new Wind();
         clouds = new Clouds();
@@ -32,12 +32,30 @@ public class Parameters implements JSONPopulator {
         sys = new Sys();
 
         coordinations.poopulate(jsonObject.optJSONObject("coord"));
-        //weather.poopulate(jsonObject.optJSONObject("weather"));
         main.poopulate(jsonObject.optJSONObject("main"));
         wind.poopulate(jsonObject.optJSONObject("wind"));
         clouds.poopulate(jsonObject.optJSONObject("clouds"));
-        rain.poopulate(jsonObject.optJSONObject("rain"));
-        //snow.poopulate(jsonObject.optJSONObject("snow"));
+
+        try
+        {
+            rain.poopulate(jsonObject.optJSONObject("rain"));
+        }
+
+        catch (NullPointerException e)
+        {
+
+        }
+
+        try
+        {
+            snow.poopulate(jsonObject.optJSONObject("snow"));
+        }
+
+        catch(NullPointerException e)
+        {
+
+        }
+
         calcTime = jsonObject.optLong("dt");
         sys.poopulate(jsonObject.optJSONObject("sys"));
         cityID = jsonObject.optLong("id");
