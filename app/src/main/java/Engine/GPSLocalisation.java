@@ -18,16 +18,19 @@ public class GPSLocalisation implements LocationListener
     private final int MY_PERMISSION_ACCESS = -12;
     private Location location;
     private Context context;
+    private double latitude;
+    private double longitude;
 
-    public GPSLocalisation(Context Context)
+    public GPSLocalisation(Context context)
     {
         this.context = context;
         criteria = new Criteria();
         locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
         refresh();
+        setLocationUpdates();
     }
 
-    private void refresh()
+    public void refresh()
     {
         try
         {
@@ -38,6 +41,40 @@ public class GPSLocalisation implements LocationListener
         {
             Toast.makeText(context, "Security error", Toast.LENGTH_LONG).show();
         }
+    }
+
+    public void setLocationUpdates()
+    {
+        try
+        {
+            locationManager.requestLocationUpdates(60000, 5, criteria, this, null);
+            setLatitude();
+            setLongitude();
+        }
+        catch (SecurityException e)
+        {
+            Toast.makeText(context, "Security error", Toast.LENGTH_LONG).show();
+        }
+    }
+
+    public double getLatitude()
+    {
+        return latitude;
+    }
+
+    public void setLatitude()
+    {
+        latitude = location.getLatitude();
+    }
+
+    public double getLongitude()
+    {
+        return longitude;
+    }
+
+    public void setLongitude()
+    {
+        longitude = location.getLongitude();
     }
 
     @Override
@@ -52,12 +89,15 @@ public class GPSLocalisation implements LocationListener
     }
 
     @Override
-    public void onProviderEnabled(String provider) {
-
+    public void onProviderEnabled(String provider)
+    {
+        Toast.makeText(context, "GPS provider enabled", Toast.LENGTH_LONG).show();
+        refresh();
     }
 
     @Override
-    public void onProviderDisabled(String provider) {
-
+    public void onProviderDisabled(String provider)
+    {
+        Toast.makeText(context, "GPS provider disabled", Toast.LENGTH_LONG).show();
     }
 }
