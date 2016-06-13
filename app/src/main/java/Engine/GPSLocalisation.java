@@ -34,7 +34,7 @@ public class GPSLocalisation implements LocationListener
     {
         try
         {
-            location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+            location = locationManager.getLastKnownLocation(LocationManager.PASSIVE_PROVIDER);
         }
 
         catch (SecurityException e)
@@ -47,7 +47,7 @@ public class GPSLocalisation implements LocationListener
     {
         try
         {
-            locationManager.requestLocationUpdates(60000, 1, criteria, this, null);
+            locationManager.requestLocationUpdates(30000, 2, criteria, this, null);
             setLatitude();
             setLongitude();
         }

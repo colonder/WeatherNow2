@@ -1,6 +1,7 @@
 package Engine;
 
 import android.os.AsyncTask;
+import android.widget.Toast;
 
 import com.example.jakub.weathernow2.WeatherServiceCallback;
 
@@ -33,14 +34,11 @@ public class WeatherService extends AsyncTask<TaskParams, Void, String>
     @Override
     protected String doInBackground(TaskParams... params)
     {
-
-        String query = "api.openweathermap.org/data/2.5/weather?lat=" +
-                params[0].getLat()+ "&lon=" + params[0].getLon() +
-                "&appid=10660a09a9fb335d72f576f7aa1bbe5b&units=metric";
-
         try
         {
-            URL url = new URL(query);
+            URL url = new URL("http://api.openweathermap.org/data/2.5/weather?lat=" +
+                    params[0].getLat()+ "&lon=" + params[0].getLon() +
+                    "&appid=10660a09a9fb335d72f576f7aa1bbe5b&units=metric");
             URLConnection connection = url.openConnection();
             InputStream inputStream =connection.getInputStream();
             BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
@@ -77,8 +75,20 @@ public class WeatherService extends AsyncTask<TaskParams, Void, String>
             return;
         }
 
-            //JSONObject data = new JSONObject(s);
-            //JSONObject queryResults = data.optJSONObject("query");
+        try
+        {
+            JSONObject data = new JSONObject(s);
+            Parameters parameters = new Parameters();
+            parameters.poopulate(data);
+            callback.serviceSuccess(parameters);
+        }
+
+        catch (JSONException e)
+        {
+            e.printStackTrace();
+        }
+
+        //JSONObject queryResults = data.optJSONObject("query");
             /*int count = queryResults.optInt("count");
 
             if (count == 0)
@@ -86,10 +96,6 @@ public class WeatherService extends AsyncTask<TaskParams, Void, String>
                 callback.serviceFailure(new LocationWeatherException("No information available"));
                 return;
             }*/
-
-            Parameters parameters = new Parameters();
-            //parameters.poopulate(queryResults.optJSONObject("results").optJSONObject("channel"));
-            callback.serviceSuccess(parameters);
     }
 }
 

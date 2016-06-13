@@ -21,6 +21,7 @@ public class MainActivity extends AppCompatActivity implements WeatherServiceCal
 
     private TextView GPSTextView;
     private TextView locationTextView;
+    private TextView temperatureTextView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,9 +31,10 @@ public class MainActivity extends AppCompatActivity implements WeatherServiceCal
 
         GPSTextView = (TextView) findViewById(R.id.GPSTextView);
         locationTextView = (TextView) findViewById(R.id.locationTextView);
+        temperatureTextView = (TextView) findViewById(R.id.temperatureTextView);
 
         progressDialog = new ProgressDialog(this);
-        progressDialog.setMessage("Retrieving data...");
+        progressDialog.setMessage("Acquiring data...");
         progressDialog.show();
 
         GPS = new GPSLocalisation(this);
@@ -45,9 +47,9 @@ public class MainActivity extends AppCompatActivity implements WeatherServiceCal
     public void serviceSuccess(Parameters parameters)
     {
         progressDialog.hide();
-        GPSTextView.setText(GPS.getLatitude() + "," + GPS.getLongitude());
+        GPSTextView.setText(GPS.getLatitude() + ", " + GPS.getLongitude());
         locationTextView.setText(parameters.getCityName());
-        //locationTextView.setText(parameters.getMain().getTemperature() + " C");
+        temperatureTextView.setText(parameters.getMain().getTemperature() + " C");
     }
 
     @Override
