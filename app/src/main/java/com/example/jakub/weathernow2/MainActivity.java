@@ -1,11 +1,15 @@
 package com.example.jakub.weathernow2;
 
 import android.app.ProgressDialog;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.multidex.MultiDex;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import java.util.Timer;
+import java.util.TimerTask;
 
 import Engine.GPSLocalisation;
 import Engine.TaskParams;
@@ -24,10 +28,11 @@ public class MainActivity extends AppCompatActivity implements WeatherServiceCal
     private TextView temperatureTextView;
     private TextView pressureTextView, humidityTextView, tempMaxTextView, tempMinTextView,
     groupDescTextView, descriptionTextView, cloudsTextView, rainTextView, snowTextView,
-            windSpeedTextView, windAngleTextView;
+            windSpeedTextView, windAngleTextView, GPSUpdate, AsyncTaskUpdate;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState)
+    {
         MultiDex.install(getApplicationContext());
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
@@ -46,15 +51,23 @@ public class MainActivity extends AppCompatActivity implements WeatherServiceCal
         snowTextView = (TextView) findViewById(R.id.snowTextView);
         windSpeedTextView = (TextView) findViewById(R.id.windSpeedTextView);
         windAngleTextView = (TextView) findViewById(R.id.windAngleTextView);
+        GPSUpdate = (TextView) findViewById(R.id.GPSUpdate);
+        AsyncTaskUpdate = (TextView) findViewById(R.id.AsyncTaskUpdate);
 
         progressDialog = new ProgressDialog(this);
         progressDialog.setMessage("Acquiring data...");
         progressDialog.show();
 
-        GPS = new GPSLocalisation(this);
-        taskParams = new TaskParams(GPS.getLatitude(), GPS.getLongitude());
-        weatherService = new WeatherService(this);
-        weatherService.execute(taskParams);
+        try
+        {
+            GPS = new GPSLocalisation(this);
+            callTask(this);
+        }
+
+        catch (RuntimeException e)
+        {
+            progressDialog.setMessage("Can not connect to server or acquire GPS position");
+        }
     }
 
     @Override
@@ -83,4 +96,40 @@ public class MainActivity extends AppCompatActivity implements WeatherServiceCal
         progressDialog.hide();
         Toast.makeText(this, exception.getMessage(), Toast.LENGTH_LONG).show();
     }
+
+    public void callTask(final WeatherServiceCallback weatherCallback)
+    {
+        final Handler handler = new Handler();
+        Timer timer = new Timer();
+        TimerTask doAsyncTask = new TimerTask()
+        {
+            @Override
+            public void run()
+            {
+                handler.post(new Runnable()
+                {
+                    @Override
+                    public void run()
+                    {
+                        try
+                        {
+                            taskParams = new TaskParams(GPS.getLatitude(), GPS.getLongitude());
+                            weatherService = new WeatherService(weatherCallback);
+                            taskParams.setLat(GPS.getLatitude());
+                            taskParams.setLon(GPS.getLongitude());
+                            weatherService.execute(taskParams);
+                        }
+
+                        catch (Exception e)
+                        {
+                            e.printStackTrace();
+                        }
+                    }
+                });
+            }
+        };
+
+        timer.schedule(doAsyncTask, 0, 5000);
+    }
+
 }

@@ -136,4 +136,22 @@
         android:layout_below="@+id/windSpeedTextView"
         android:layout_alignParentStart="true" />
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="Medium Text"
+        android:id="@+id/AsyncTaskUpdate"
+        android:layout_alignTop="@+id/temperatureTextView"
+        android:layout_alignParentEnd="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="Medium Text"
+        android:id="@+id/GPSUpdate"
+        android:layout_below="@+id/AsyncTaskUpdate"
+        android:layout_alignParentEnd="true" />
+
 </RelativeLayout>
