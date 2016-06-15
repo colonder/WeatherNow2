@@ -1,4 +1,8 @@
 <resources>
     <string name="app_name">WeatherNow2</string>
     <string name="google_maps_key">AIzaSyBE96x2gPbRlrKSmw_Leh45qxPceLxD6Uk</string>
+    <string name="google_app_id">ornate-crossbar-134123</string>
+    <string name="location_failure">Can not acquire data neither from network nor GPS. Would you
+    like to attempt to refresh?</string>
+    <string name="location_dialog_title">Location unknown</string>
 </resources>

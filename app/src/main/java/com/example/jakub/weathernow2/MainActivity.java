@@ -57,16 +57,17 @@ public class MainActivity extends AppCompatActivity implements WeatherServiceCal
         progressDialog = new ProgressDialog(this);
         progressDialog.setMessage("Acquiring data...");
         progressDialog.show();
+        GPS = new GPSLocalisation(this, this);
+        taskParams = new TaskParams(GPS.getLatitude(), GPS.getLongitude());
 
         try
         {
-            GPS = new GPSLocalisation(this);
             callTask(this);
         }
 
         catch (RuntimeException e)
         {
-            progressDialog.setMessage("Can not connect to server or acquire GPS position");
+            serviceFailure(e);
         }
     }
 
@@ -97,6 +98,12 @@ public class MainActivity extends AppCompatActivity implements WeatherServiceCal
         Toast.makeText(this, exception.getMessage(), Toast.LENGTH_LONG).show();
     }
 
+    @Override
+    public void inform(String message)
+    {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+    }
+
     public void callTask(final WeatherServiceCallback weatherCallback)
     {
         final Handler handler = new Handler();
@@ -113,7 +120,6 @@ public class MainActivity extends AppCompatActivity implements WeatherServiceCal
                     {
                         try
                         {
-                            taskParams = new TaskParams(GPS.getLatitude(), GPS.getLongitude());
                             weatherService = new WeatherService(weatherCallback);
                             taskParams.setLat(GPS.getLatitude());
                             taskParams.setLon(GPS.getLongitude());

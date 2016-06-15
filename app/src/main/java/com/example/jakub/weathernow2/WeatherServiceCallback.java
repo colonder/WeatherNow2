@@ -8,4 +8,5 @@ import data.Parameters;
 public interface WeatherServiceCallback {
     void serviceSuccess(Parameters parameters);
     void serviceFailure(Exception exception);
+    void inform(String message);
 }
