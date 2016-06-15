@@ -51,12 +51,12 @@ public class GPSLocalisation implements LocationListener
 
             if(location == null)
             {
-                callback.inform("Can not acquire data from network. Attempting to use passive provider.");
+                callback.inform(context.getResources().getString(R.string.network_fail));
                 location = locationManager.getLastKnownLocation(LocationManager.PASSIVE_PROVIDER);
 
                 if(location == null)
                 {
-                    callback.inform("Can not acquire data from passive provider. Attempting to use GPS.");
+                    callback.inform(context.getResources().getString(R.string.passive_fail));
                     location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
                 }
             }

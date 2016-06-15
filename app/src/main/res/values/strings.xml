@@ -5,4 +5,6 @@
     <string name="location_failure">Can not acquire data neither from network nor GPS. Would you
     like to attempt to refresh?</string>
     <string name="location_dialog_title">Location unknown</string>
+    <string name="network_fail">Can not acquire data from network. Attempting to use passive provider.</string>
+    <string name="passive_fail">Can not acquire data from passive provider. Attempting to use GPS.</string>
 </resources>
