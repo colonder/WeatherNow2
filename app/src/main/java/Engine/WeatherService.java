@@ -1,7 +1,6 @@
 package Engine;
 
 import android.os.AsyncTask;
-import android.widget.Toast;
 
 import com.example.jakub.weathernow2.WeatherServiceCallback;
 

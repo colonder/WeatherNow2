@@ -7,4 +7,5 @@
     <string name="location_dialog_title">Location unknown</string>
     <string name="network_fail">Can not acquire data from network. Attempting to use passive provider.</string>
     <string name="passive_fail">Can not acquire data from passive provider. Attempting to use GPS.</string>
+    <string name="action_settings">Menu</string>
 </resources>

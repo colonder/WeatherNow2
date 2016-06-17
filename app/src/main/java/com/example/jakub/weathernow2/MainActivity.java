@@ -1,16 +1,20 @@
 package com.example.jakub.weathernow2;
 
 import android.app.ProgressDialog;
-import android.os.Handler;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.multidex.MultiDex;
+import android.support.v7.app.AppCompatActivity;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.Timer;
 import java.util.TimerTask;
 
+import Engine.FlyOutContainer;
 import Engine.GPSLocalisation;
 import Engine.TaskParams;
 import Engine.WeatherService;
@@ -18,6 +22,7 @@ import data.Parameters;
 
 public class MainActivity extends AppCompatActivity implements WeatherServiceCallback
 {
+    FlyOutContainer flyOutContainer;
     private GPSLocalisation GPS;
     private TaskParams taskParams;
     private WeatherService weatherService;
@@ -35,6 +40,7 @@ public class MainActivity extends AppCompatActivity implements WeatherServiceCal
     {
         MultiDex.install(getApplicationContext());
         super.onCreate(savedInstanceState);
+        flyOutContainer = new FlyOutContainer(this);
         setContentView(R.layout.activity_main);
 
         GPSTextView = (TextView) findViewById(R.id.GPSTextView);
@@ -69,6 +75,12 @@ public class MainActivity extends AppCompatActivity implements WeatherServiceCal
         {
             serviceFailure(e);
         }
+    }
+
+    public boolean onCreateOptionsMenu(Menu menu)
+    {
+        getMenuInflater().inflate(R.menu.slidingmenu, menu);
+        return true;
     }
 
     @Override
@@ -135,6 +147,11 @@ public class MainActivity extends AppCompatActivity implements WeatherServiceCal
         };
 
         timer.schedule(doAsyncTask, 0, 5000);
+    }
+
+    public void toggleMenu(View v)
+    {
+        this.flyOutContainer.toggleMenu();
     }
 
 }

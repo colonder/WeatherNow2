@@ -1,7 +1,6 @@
 package Engine;
 
 import android.app.AlertDialog;
-import android.app.DialogFragment;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -14,8 +13,6 @@ import android.widget.Toast;
 
 import com.example.jakub.weathernow2.R;
 import com.example.jakub.weathernow2.WeatherServiceCallback;
-
-import data.Weather;
 
 /**
  * Created by Jakub on 13.06.2016.
@@ -72,7 +69,7 @@ public class GPSLocalisation implements LocationListener
     {
         try
         {
-            locationManager.requestLocationUpdates(5000, 0.1f, criteria, this, null);
+            locationManager.requestLocationUpdates(5000, 1, criteria, this, null);
             setLatitude();
             setLongitude();
         }
