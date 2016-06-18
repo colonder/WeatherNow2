@@ -1,9 +1,9 @@
 package com.example.jakub.weathernow2;
 
 import android.app.ProgressDialog;
-import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.design.widget.NavigationView;
 import android.support.multidex.MultiDex;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -12,13 +12,12 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import java.util.Timer;
 import java.util.TimerTask;
+
 import Engine.GPSLocalisation;
 import Engine.TaskParams;
 import Engine.WeatherService;
@@ -37,6 +36,10 @@ public class MainActivity extends AppCompatActivity implements WeatherServiceCal
     private TextView pressureTextView, humidityTextView, tempMaxTextView, tempMinTextView,
     groupDescTextView, descriptionTextView, cloudsTextView, rainTextView, snowTextView,
             windSpeedTextView, windAngleTextView;
+    private NavigationView mNavigationView;
+    private DrawerLayout mDrawerLayout;
+    private Toolbar toolbar;
+    private ActionBarDrawerToggle mDrawerToggle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -44,6 +47,7 @@ public class MainActivity extends AppCompatActivity implements WeatherServiceCal
         MultiDex.install(getApplicationContext());
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        initDrawerNavigation();
 
         GPSTextView = (TextView) findViewById(R.id.GPSTextView);
         locationTextView = (TextView) findViewById(R.id.locationTextView);
@@ -75,6 +79,82 @@ public class MainActivity extends AppCompatActivity implements WeatherServiceCal
         {
             serviceFailure(e);
         }
+    }
+
+    public void initDrawerNavigation()
+    {
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar.setTitle(R.string.app_name);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        //getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_drawer);
+        //getSupportActionBar().setDisplayShowHomeEnabled(true);
+
+        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        mNavigationView = (NavigationView) findViewById(R.id.navigation_view);
+        mNavigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+
+            @Override
+            public boolean onNavigationItemSelected(MenuItem item) {
+                item.setChecked(true);
+                switch (item.getItemId()) {
+                    case R.id.nav_dyn_gps:
+                        break;
+
+                    case R.id.nav_city:
+                        break;
+
+                    case R.id.nav_provided_gps:
+                        break;
+                }
+                mDrawerLayout.closeDrawers();
+                return true;
+            }
+        });
+
+        mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, toolbar, R.string.drawer_open,
+                R.string.drawer_close)
+        {
+            // Called when a drawer has settled in a completely closed state.
+            public void onDrawerClosed(View view)
+            {
+                super.onDrawerClosed(view);
+            }
+
+            // Called when a drawer has settled in a completely open state.
+            public void onDrawerOpened(View drawerView)
+            {
+                super.onDrawerOpened(drawerView);
+            }
+        };
+
+        mDrawerLayout.addDrawerListener(mDrawerToggle);
+    }
+
+    @Override
+    protected void onPostCreate(Bundle savedInstanceState)
+    {
+        super.onPostCreate(savedInstanceState);
+        mDrawerToggle.syncState();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu){
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item){
+
+        switch(item.getItemId())
+        {
+            case android.R.id.home:
+                inform("Home button tapped");
+                //mDrawerLayout.openDrawer(GravityCompat.START);  // OPEN DRAWER
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
