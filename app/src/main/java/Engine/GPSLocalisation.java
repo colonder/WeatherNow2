@@ -1,14 +1,15 @@
 package Engine;
 
 import android.app.AlertDialog;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.widget.Toast;
 
 import com.example.jakub.weathernow2.R;
@@ -21,20 +22,19 @@ public class GPSLocalisation implements LocationListener
 {
     private LocationManager locationManager;
     private Criteria criteria;
-    private final int MY_PERMISSION_ACCESS = -12;
     private Location location;
     private Context context;
     private double latitude;
     private double longitude;
     private WeatherServiceCallback callback;
-    private ProgressDialog progressDialog;
+    private SharedPreferences sharedPref;
 
     public GPSLocalisation(Context context, WeatherServiceCallback callback)
     {
         this.callback = callback;
         this.context = context;
+        sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
         criteria = new Criteria();
-        progressDialog = new ProgressDialog(context);
         locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
         refresh();
         setLocationUpdates();
@@ -44,18 +44,24 @@ public class GPSLocalisation implements LocationListener
     {
         try
         {
-            location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-
-            if(location == null)
+            if(!sharedPref.getBoolean("only_wifi", false))
             {
-                callback.inform(context.getResources().getString(R.string.network_fail));
-                location = locationManager.getLastKnownLocation(LocationManager.PASSIVE_PROVIDER);
+                location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
 
-                if(location == null)
-                {
-                    callback.inform(context.getResources().getString(R.string.passive_fail));
-                    location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+                if (location == null) {
+                    callback.inform(context.getResources().getString(R.string.network_fail));
+                    location = locationManager.getLastKnownLocation(LocationManager.PASSIVE_PROVIDER);
+
+                    if (location == null) {
+                        callback.inform(context.getResources().getString(R.string.passive_fail));
+                        location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+                    }
                 }
+            }
+
+            else
+            {
+                location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
             }
         }
 

@@ -1,9 +1,71 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string-array name="drawerOptions">
-        <item>Wyszukuj po:</item>
-        <item>Dynamiczne współrzędne</item>
-        <item>Miasto</item>
-        <item>Współrzędne</item>
+
+    <string-array name="language_full">
+        <item>English</item>
+        <item>Russian</item>
+        <item>Italian</item>
+        <item>Spanish</item>
+        <item>Ukrainian</item>
+        <item>German</item>
+        <item>Portuguese</item>
+        <item>Romanian</item>
+        <item>Polish</item>
+        <item>Finnish</item>
+        <item>Dutch</item>
+        <item>French</item>
+        <item>Bulgarian</item>
+        <item>Swedish</item>
+        <item>Chinese Traditional</item>
+        <item>Chinese Simplfied</item>
+        <item>Turkish</item>
+        <item>Croatian</item>
+        <item>Catalan</item>
     </string-array>
+
+    <string-array name="language_short">
+        <item>en</item>
+        <item>ru</item>
+        <item>it</item>
+        <item>es</item>
+        <item>uk</item>
+        <item>de</item>
+        <item>pt</item>
+        <item>ro</item>
+        <item>pl</item>
+        <item>fi</item>
+        <item>nl</item>
+        <item>fr</item>
+        <item>bg</item>
+        <item>sv</item>
+        <item>zh_tw</item>
+        <item>zh</item>
+        <item>tr</item>
+        <item>hr</item>
+        <item>ca</item>
+    </string-array>
+
+    <string-array name="units">
+        <item>metric</item>
+        <item>imperial</item>
+        <item>kelvin</item>
+    </string-array>
+
+    <string-array name="units_val">
+        <item>metric</item>
+        <item>imperial</item>
+        <item></item>
+    </string-array>
+
+    <string-array name="accuracy">
+        <item>accurate</item>
+        <item>like</item>
+    </string-array>
+
+    <string-array name="update_time">
+        <item>1</item>
+        <item>5</item>
+        <item>10</item>
+    </string-array>
+
 </resources>

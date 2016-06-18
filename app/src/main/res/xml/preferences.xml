@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <ListPreference
+        android:key="language"
+        android:title="Forecast language"
+        android:defaultValue="pl"
+        android:dialogTitle="Select language"
+        android:entries="@array/language_full"
+        android:entryValues="@array/language_short"
+        />
+
+    <ListPreference
+        android:key="units"
+        android:title="Units"
+        android:defaultValue="metric"
+        android:dialogTitle="Select unit"
+        android:entries="@array/units"
+        android:entryValues="@array/units_val"
+        />
+
+    <ListPreference
+        android:key="accuracy"
+        android:title="Accuracy"
+        android:defaultValue="accurate"
+        android:dialogTitle="Select accuracy"
+        android:entries="@array/accuracy"
+        android:entryValues="@array/language_short"
+        />
+
+    <ListPreference
+        android:key="update_time"
+        android:title="Update interval"
+        android:defaultValue="5"
+        android:dialogTitle="Select update time"
+        android:entries="@array/update_time"
+        android:entryValues="@array/update_time"
+        />
+
+    <CheckBoxPreference
+        android:key="detailed"
+        android:title="Detailed info"
+        android:defaultValue="true" />
+
+    <CheckBoxPreference
+        android:key="only_wifi"
+        android:title="Download data only while on WiFi"
+        android:defaultValue="false" />
+
+</PreferenceScreen>

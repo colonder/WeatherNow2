@@ -1,32 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <group
-        android:checkableBehavior="single">
+    <group android:checkableBehavior="single">
 
         <item android:title="Forecast by">
-
-            <item
-                android:id="@+id/nav_dyn_gps"
-                android:icon="@drawable/ic_action_location_found"
-                android:title="Dynamic coordinates" />
-            <item
-                android:id="@+id/nav_city"
-                android:icon="@drawable/ic_action_place"
-                android:title="City" />
-            <item
-                android:id="@+id/nav_provided_gps"
-                android:icon="@drawable/ic_action_web_site"
-                android:title="Passive coordinates" />
+            <menu>
+                <item
+                    android:id="@+id/nav_dyn_gps"
+                    android:icon="@drawable/ic_action_location_found"
+                    android:title="Dynamic coordinates" />
+                <item
+                    android:id="@+id/nav_city"
+                    android:icon="@drawable/ic_action_place"
+                    android:title="City" />
+                <item
+                    android:id="@+id/nav_provided_gps"
+                    android:icon="@drawable/ic_action_web_site"
+                    android:title="Passive coordinates" />
+            </menu>
         </item>
     </group>
 
-    <item android:title="Sub items">
-        <menu>
-            <item
-                android:id="@+id/nav_example_sub_item_1"
-                android:title="Example Sub Item #1" />
-        </menu>
-    </item>
+    <item
+        android:id="@+id/nav_settings"
+        android:icon="@drawable/ic_setting_dark"
+        android:title="Settings" />
 
 </menu>

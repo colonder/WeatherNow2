@@ -1,10 +1,12 @@
 package com.example.jakub.weathernow2;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.NavigationView;
 import android.support.multidex.MultiDex;
+import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
@@ -30,7 +32,6 @@ public class MainActivity extends AppCompatActivity implements WeatherServiceCal
     private WeatherService weatherService;
     private ProgressDialog progressDialog;
 
-    private TextView GPSTextView;
     private TextView locationTextView;
     private TextView temperatureTextView;
     private TextView pressureTextView, humidityTextView, tempMaxTextView, tempMinTextView,
@@ -44,12 +45,12 @@ public class MainActivity extends AppCompatActivity implements WeatherServiceCal
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
+        // Display the fragment as the main content.
         MultiDex.install(getApplicationContext());
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         initDrawerNavigation();
 
-        GPSTextView = (TextView) findViewById(R.id.GPSTextView);
         locationTextView = (TextView) findViewById(R.id.locationTextView);
         temperatureTextView = (TextView) findViewById(R.id.temperatureTextView);
         pressureTextView = (TextView) findViewById(R.id.pressureTextView);
@@ -68,7 +69,7 @@ public class MainActivity extends AppCompatActivity implements WeatherServiceCal
         progressDialog.setMessage("Acquiring data...");
         progressDialog.show();
         GPS = new GPSLocalisation(this, this);
-        taskParams = new TaskParams(GPS.getLatitude(), GPS.getLongitude());
+        taskParams = new TaskParams(GPS.getLatitude(), GPS.getLongitude(), this);
 
         try
         {
@@ -87,8 +88,6 @@ public class MainActivity extends AppCompatActivity implements WeatherServiceCal
         toolbar.setTitle(R.string.app_name);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
-        //getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_drawer);
-        //getSupportActionBar().setDisplayShowHomeEnabled(true);
 
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mNavigationView = (NavigationView) findViewById(R.id.navigation_view);
@@ -99,12 +98,20 @@ public class MainActivity extends AppCompatActivity implements WeatherServiceCal
                 item.setChecked(true);
                 switch (item.getItemId()) {
                     case R.id.nav_dyn_gps:
+                        inform("Dynamic GPS selected");
                         break;
 
                     case R.id.nav_city:
+                        inform("City selected");
                         break;
 
                     case R.id.nav_provided_gps:
+                        inform("Provided GPS selected");
+                        break;
+
+                    case R.id.nav_settings:
+                        Intent i = new Intent(getApplicationContext(), SettingsActivity.class);
+                        startActivity(i);
                         break;
                 }
                 mDrawerLayout.closeDrawers();
@@ -151,7 +158,7 @@ public class MainActivity extends AppCompatActivity implements WeatherServiceCal
         {
             case android.R.id.home:
                 inform("Home button tapped");
-                //mDrawerLayout.openDrawer(GravityCompat.START);  // OPEN DRAWER
+                mDrawerLayout.openDrawer(GravityCompat.START);  // OPEN DRAWER
                 return true;
         }
         return super.onOptionsItemSelected(item);
@@ -161,7 +168,6 @@ public class MainActivity extends AppCompatActivity implements WeatherServiceCal
     public void serviceSuccess(Parameters parameters)
     {
         progressDialog.hide();
-        GPSTextView.setText(GPS.getLatitude() + ", " + GPS.getLongitude());
         locationTextView.setText(parameters.getCityName());
         temperatureTextView.setText("Temperature: " + parameters.getMain().getTemperature() + " C");
         pressureTextView.setText("Pressure: " + parameters.getMain().getPressure() + " hPa");
