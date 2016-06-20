@@ -6,7 +6,12 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.NavigationView;
 import android.support.multidex.MultiDex;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.GravityCompat;
+import android.support.v4.view.PagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
@@ -14,13 +19,14 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.Timer;
 import java.util.TimerTask;
 
+import Engine.ForecastPage;
 import Engine.GPSLocalisation;
+import Engine.PollutionPage;
 import Engine.TaskParams;
 import Engine.WeatherService;
 import data.Parameters;
@@ -31,39 +37,37 @@ public class MainActivity extends AppCompatActivity implements WeatherServiceCal
     private TaskParams taskParams;
     private WeatherService weatherService;
     private ProgressDialog progressDialog;
-
-    private TextView locationTextView;
-    private TextView temperatureTextView;
-    private TextView pressureTextView, humidityTextView, tempMaxTextView, tempMinTextView,
-    groupDescTextView, descriptionTextView, cloudsTextView, rainTextView, snowTextView,
-            windSpeedTextView, windAngleTextView;
     private NavigationView mNavigationView;
     private DrawerLayout mDrawerLayout;
     private Toolbar toolbar;
     private ActionBarDrawerToggle mDrawerToggle;
+    private static final int NUM_PAGES = 2;
+    private ViewPager mPager;
+    private PagerAdapter mPagerAdapter;
+    private ForecastPage forecastPage;
+    private PollutionPage pollutionPage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
-        // Display the fragment as the main content.
         MultiDex.install(getApplicationContext());
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         initDrawerNavigation();
 
-        locationTextView = (TextView) findViewById(R.id.locationTextView);
-        temperatureTextView = (TextView) findViewById(R.id.temperatureTextView);
-        pressureTextView = (TextView) findViewById(R.id.pressureTextView);
-        humidityTextView = (TextView) findViewById(R.id.humidityTextView);
-        tempMaxTextView = (TextView) findViewById(R.id.tempMaxTextView);
-        tempMinTextView = (TextView) findViewById(R.id.tempMinTextView);
-        groupDescTextView = (TextView) findViewById(R.id.groupDescTextView);
-        descriptionTextView = (TextView) findViewById(R.id.descriptionTextView);
-        cloudsTextView = (TextView) findViewById(R.id.cloudsTextView);
-        rainTextView = (TextView) findViewById(R.id.rainTextView);
-        snowTextView = (TextView) findViewById(R.id.snowTextView);
-        windSpeedTextView = (TextView) findViewById(R.id.windSpeedTextView);
-        windAngleTextView = (TextView) findViewById(R.id.windAngleTextView);
+        mPager = (ViewPager) findViewById(R.id.pager);
+        mPagerAdapter = new ScreenSlidePagerAdapter(getSupportFragmentManager());
+        mPager.setAdapter(mPagerAdapter);
+        mPager.addOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
+            @Override
+            public void onPageSelected(int position) {
+                // When changing pages, reset the action bar actions since they are dependent
+                // on which page is currently active. An alternative approach is to have each
+                // fragment expose actions itself (rather than the activity exposing actions),
+                // but for simplicity, the activity provides the actions in this sample.
+                invalidateOptionsMenu();
+            }
+        });
 
         progressDialog = new ProgressDialog(this);
         progressDialog.setMessage("Acquiring data...");
@@ -79,6 +83,23 @@ public class MainActivity extends AppCompatActivity implements WeatherServiceCal
         catch (RuntimeException e)
         {
             serviceFailure(e);
+        }
+    }
+
+    @Override
+    public void onBackPressed()
+    {
+        if (mPager.getCurrentItem() == 0)
+        {
+            // If the user is currently looking at the first step, allow the system to handle the
+            // Back button. This calls finish() on this activity and pops the back stack.
+            super.onBackPressed();
+        }
+
+        else
+        {
+            // Otherwise, select the previous step.
+            mPager.setCurrentItem(mPager.getCurrentItem() - 1);
         }
     }
 
@@ -164,37 +185,6 @@ public class MainActivity extends AppCompatActivity implements WeatherServiceCal
         return super.onOptionsItemSelected(item);
     }
 
-    @Override
-    public void serviceSuccess(Parameters parameters)
-    {
-        progressDialog.hide();
-        locationTextView.setText(parameters.getCityName());
-        temperatureTextView.setText("Temperature: " + parameters.getMain().getTemperature() + " C");
-        pressureTextView.setText("Pressure: " + parameters.getMain().getPressure() + " hPa");
-        humidityTextView.setText("Humidity: " + parameters.getMain().getHumidity() + "%");
-        tempMaxTextView.setText("Max temp: " + parameters.getMain().getTemp_max() + " C");
-        tempMinTextView.setText("Min temp: " + parameters.getMain().getTemp_min() + " C");
-        groupDescTextView.setText(parameters.getWeather().getGroupParameters());
-        descriptionTextView.setText(parameters.getWeather().getDescription());
-        cloudsTextView.setText("Cloudiness: " + parameters.getClouds().getCloudiness());
-        rainTextView.setText("Rain in last 3 hours: " + parameters.getRain().getLast3H());
-        snowTextView.setText("Snow in last 3 hours: " + parameters.getSnow().getLast3H());
-        windSpeedTextView.setText("Wind speed: " + parameters.getWind().getSpeed() + " m/s");
-        windAngleTextView.setText("Wind angle: " + parameters.getWind().getDegrees() + " degrees");
-    }
-
-    @Override
-    public void serviceFailure(Exception exception)
-    {
-        Toast.makeText(this, exception.getMessage(), Toast.LENGTH_LONG).show();
-    }
-
-    @Override
-    public void inform(String message)
-    {
-        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
-    }
-
     public void callTask(final WeatherServiceCallback weatherCallback)
     {
         final Handler handler = new Handler();
@@ -227,5 +217,53 @@ public class MainActivity extends AppCompatActivity implements WeatherServiceCal
         };
 
         timer.schedule(doAsyncTask, 0, 5000);
+    }
+
+    @Override
+    public void serviceSuccess(Parameters parameters)
+    {
+        progressDialog.hide();
+        forecastPage.updateLabels(parameters);
+    }
+
+    @Override
+    public void serviceFailure(Exception exception)
+    {
+        progressDialog.hide();
+        progressDialog.setMessage(exception.getMessage());
+        progressDialog.show();
+    }
+
+    @Override
+    public void inform(String message)
+    {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+    }
+
+    private class ScreenSlidePagerAdapter extends FragmentStatePagerAdapter
+    {
+        public ScreenSlidePagerAdapter(FragmentManager fm) {
+            super(fm);
+        }
+
+        @Override
+        public Fragment getItem(int position)
+        {
+            switch(position)
+            {
+                case 0:
+                    return forecastPage = new ForecastPage();
+                case 1:
+                    return pollutionPage = new PollutionPage();
+                default:
+                    return forecastPage = new ForecastPage();
+            }
+        }
+
+        @Override
+        public int getCount()
+        {
+            return NUM_PAGES;
+        }
     }
 }

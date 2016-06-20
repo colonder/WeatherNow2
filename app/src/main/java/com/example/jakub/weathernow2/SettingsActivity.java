@@ -2,6 +2,7 @@ package com.example.jakub.weathernow2;
 
 import android.app.Activity;
 import android.os.Bundle;
+
 import Engine.SettingsFragment;
 
 /**

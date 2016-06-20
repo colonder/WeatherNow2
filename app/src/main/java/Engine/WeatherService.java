@@ -28,8 +28,6 @@ public class WeatherService extends AsyncTask<TaskParams, Void, String> {
         this.callback = callback;
     }
 
-
-
     @Override
     protected String doInBackground(TaskParams... params) {
         try {
