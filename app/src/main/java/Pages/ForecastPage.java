@@ -1,4 +1,4 @@
-package Engine;
+package Pages;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -6,6 +6,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import com.example.jakub.weathernow2.R;
 
 import data.Parameters;
@@ -18,17 +20,18 @@ public class ForecastPage extends Fragment
     private TextView pressureTextView, humidityTextView, tempMaxTextView, tempMinTextView,
             groupDescTextView, descriptionTextView, cloudsTextView, rainTextView, snowTextView,
             windSpeedTextView, windAngleTextView, locationTextView, temperatureTextView;
-    
+
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
+        Toast.makeText(getContext(), "page created", Toast.LENGTH_LONG);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
         ViewGroup view = (ViewGroup) inflater.inflate(R.layout.forecast_layout, container, false);
-
         locationTextView = (TextView) view.findViewById(R.id.locationTextView);
         temperatureTextView = (TextView) view.findViewById(R.id.temperatureTextView);
         pressureTextView = (TextView) view.findViewById(R.id.pressureTextView);
@@ -42,7 +45,7 @@ public class ForecastPage extends Fragment
         snowTextView = (TextView) view.findViewById(R.id.snowTextView);
         windSpeedTextView = (TextView) view.findViewById(R.id.windSpeedTextView);
         windAngleTextView = (TextView) view.findViewById(R.id.windAngleTextView);
-        
+
         return view;
     }
 
