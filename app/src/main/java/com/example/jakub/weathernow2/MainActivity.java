@@ -60,12 +60,12 @@ public class MainActivity extends AppCompatActivity
                         break;
 
                     case R.id.nav_city:
-                        //fragment = new SecondMenu();
+                        fragment = new SecondMenu();
                         fragmentManager.beginTransaction().replace(R.id.container, fragment).commit();
                         break;
 
                     case R.id.nav_provided_gps:
-                        //fragment = new ThirdMenu();
+                        fragment = new ThirdMenu();
                         fragmentManager.beginTransaction().replace(R.id.container, fragment).commit();
                         break;
 
