@@ -61,7 +61,7 @@ public class GPSLocalisation implements LocationListener
 
             else
             {
-                location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+                location = locationManager.getLastKnownLocation(LocationManager.PASSIVE_PROVIDER);
             }
         }
 

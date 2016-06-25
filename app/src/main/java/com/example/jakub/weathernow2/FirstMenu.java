@@ -4,12 +4,13 @@ import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.AppCompatActivity;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Toast;
 
 import java.util.Timer;
@@ -25,7 +26,7 @@ import data.Parameters;
 /**
  * Created by Jakub on 22.06.2016.
  */
-public class FirstMenu extends FragmentActivity implements WeatherServiceCallback
+public class FirstMenu extends Fragment implements WeatherServiceCallback
 {
     private ViewPager mPager;
     private PagerAdapter mPagerAdapter;
@@ -40,28 +41,17 @@ public class FirstMenu extends FragmentActivity implements WeatherServiceCallbac
     private WeatherService weatherService;
 
     @Override
-    public void onCreate(Bundle savedInstanceState)
-    {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        mPager = (ViewPager) findViewById(R.id.pager);
-        mPagerAdapter = new ScreenSlidePagerAdapter(getSupportFragmentManager());
-        mPager.setAdapter(mPagerAdapter);
-        mPager.addOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
-            @Override
-            public void onPageSelected(int position) {
-                invalidateOptionsMenu();
-            }
-        });
 
         handler = new Handler();
         timer = new Timer();
 
-        progressDialog = new ProgressDialog(this);
+        progressDialog = new ProgressDialog(getContext());
         progressDialog.setMessage("Acquiring data...");
         progressDialog.show();
-        GPS = new GPSLocalisation(this, this);
-        taskParams = new TaskParams(GPS.getLatitude(), GPS.getLongitude(), this);
+        GPS = new GPSLocalisation(getContext(), this);
+        taskParams = new TaskParams(GPS.getLatitude(), GPS.getLongitude(), getContext());
 
         try
         {
@@ -75,20 +65,15 @@ public class FirstMenu extends FragmentActivity implements WeatherServiceCallbac
     }
 
     @Override
-    public void onBackPressed()
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
-        if (mPager.getCurrentItem() == 0)
-        {
-            // If the user is currently looking at the first step, allow the system to handle the
-            // Back button. This calls finish() on this activity and pops the back stack.
-            super.onBackPressed();
-        }
+        ViewGroup view = (ViewGroup) inflater.inflate(R.layout.view_pager_layout, container, false);
 
-        else
-        {
-            // Otherwise, select the previous step.
-            mPager.setCurrentItem(mPager.getCurrentItem() - 1);
-        }
+        mPagerAdapter = new ScreenSlidePagerAdapter(getChildFragmentManager());
+        mPager = (ViewPager) view.findViewById(R.id.pager);
+        mPager.setAdapter(mPagerAdapter);
+
+        return view;
     }
 
     private class ScreenSlidePagerAdapter extends FragmentStatePagerAdapter
@@ -160,14 +145,12 @@ public class FirstMenu extends FragmentActivity implements WeatherServiceCallbac
     @Override
     public void serviceFailure(Exception exception)
     {
-        progressDialog.hide();
-        progressDialog.setMessage(exception.getMessage());
-        progressDialog.show();
+        Toast.makeText(getContext(), exception.getMessage(), Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void inform(String message)
     {
-        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+        Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
     }
 }

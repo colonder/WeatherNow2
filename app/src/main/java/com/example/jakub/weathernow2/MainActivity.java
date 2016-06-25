@@ -1,11 +1,11 @@
 package com.example.jakub.weathernow2;
 
-import android.app.FragmentManager;
+import android.support.v4.app.FragmentManager;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.multidex.MultiDex;
-import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.Fragment;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -21,7 +21,7 @@ public class MainActivity extends AppCompatActivity
     private DrawerLayout mDrawerLayout;
     private Toolbar toolbar;
     private ActionBarDrawerToggle mDrawerToggle;
-    private FragmentActivity fragment;
+    private Fragment fragment;
     private FragmentManager fragmentManager;
 
     @Override
@@ -31,8 +31,8 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         initDrawerNavigation();
-        fragment = new FirstMenu();
-        fragmentManager = getFragmentManager();
+        fragmentManager = getSupportFragmentManager();
+        fragmentManager.beginTransaction().add(R.id.container, new FirstMenu()).commit();
     }
 
     public void initDrawerNavigation()
@@ -51,30 +51,34 @@ public class MainActivity extends AppCompatActivity
             public boolean onNavigationItemSelected(MenuItem item)
             {
                 item.setChecked(true);
-                if(fragment != null)
-                    fragment.finish();
 
                 switch (item.getItemId())
                 {
                     case R.id.nav_dyn_gps:
                         fragment = new FirstMenu();
+                        fragmentManager.beginTransaction().replace(R.id.container, fragment).commit();
                         break;
 
                     case R.id.nav_city:
-                        fragment = new SecondMenu();
+                        //fragment = new SecondMenu();
+                        fragmentManager.beginTransaction().replace(R.id.container, fragment).commit();
                         break;
 
                     case R.id.nav_provided_gps:
-                        fragment = new ThirdMenu();
+                        //fragment = new ThirdMenu();
+                        fragmentManager.beginTransaction().replace(R.id.container, fragment).commit();
                         break;
 
                     case R.id.nav_settings:
                         Intent i = new Intent(getApplicationContext(), SettingsActivity.class);
                         startActivity(i);
                         break;
-                }
 
-                //fragmentManager.beginTransaction().replace(R.id.container, fragment).commit();
+                    default:
+                        fragment = new FirstMenu();
+                        fragmentManager.beginTransaction().replace(R.id.container, fragment).commit();
+                        break;
+                }
 
                 mDrawerLayout.closeDrawers();
                 return true;

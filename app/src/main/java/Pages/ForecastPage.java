@@ -25,7 +25,6 @@ public class ForecastPage extends Fragment
     public void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        Toast.makeText(getContext(), "page created", Toast.LENGTH_LONG);
     }
 
     @Override
