@@ -7,7 +7,8 @@ import org.json.JSONObject;
 /**
  * Created by Jakub on 13.06.2016.
  */
-public class Weather {
+public class Weather
+{
 
     private int weatherID;
     private String groupParameters;

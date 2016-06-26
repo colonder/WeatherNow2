@@ -15,7 +15,8 @@ public class Main implements JSONPopulator {
 
 
     @Override
-    public void poopulate(JSONObject jsonObject) {
+    public void poopulate(JSONObject jsonObject)
+    {
         temperature = jsonObject.optDouble("temp");
         pressure = jsonObject.optInt("pressure");
         humidity = jsonObject.optInt("humidity");

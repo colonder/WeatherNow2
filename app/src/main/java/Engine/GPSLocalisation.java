@@ -15,6 +15,8 @@ import android.widget.Toast;
 import com.example.jakub.weathernow2.R;
 import com.example.jakub.weathernow2.WeatherServiceCallback;
 
+import java.math.BigDecimal;
+
 /**
  * Created by Jakub on 13.06.2016.
  */
@@ -106,7 +108,8 @@ public class GPSLocalisation implements LocationListener
 
     public double getLatitude()
     {
-        return latitude;
+        BigDecimal lat = new BigDecimal(latitude).setScale(5, BigDecimal.ROUND_UP);
+        return lat.doubleValue();
     }
 
     public void setLatitude()
@@ -116,7 +119,8 @@ public class GPSLocalisation implements LocationListener
 
     public double getLongitude()
     {
-        return longitude;
+        BigDecimal lat = new BigDecimal(longitude).setScale(5, BigDecimal.ROUND_UP);
+        return lat.doubleValue();
     }
 
     public void setLongitude()

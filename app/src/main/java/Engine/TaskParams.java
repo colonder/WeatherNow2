@@ -25,11 +25,19 @@ public class TaskParams
         accuracy = sharedPref.getString("accuracy", "");
     }
 
-    public double getLat() {
+    public double getLat(boolean accurate)
+    {
+        if(!accurate)
+            return (int)lat;
+
         return lat;
     }
 
-    public double getLon() {
+    public double getLon(boolean accurate)
+    {
+        if(!accurate)
+            return (int)lon;
+
         return lon;
     }
 

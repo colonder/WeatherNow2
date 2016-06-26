@@ -17,16 +17,18 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import Engine.GPSLocalisation;
+import Engine.PollutionService;
 import Engine.TaskParams;
 import Engine.WeatherService;
 import Pages.ForecastPage;
 import Pages.PollutionPage;
 import data.Parameters;
+import pollutionData.PollutionParameters;
 
 /**
  * Created by Jakub on 22.06.2016.
  */
-public class FirstMenu extends Fragment implements WeatherServiceCallback
+public class FirstMenu extends Fragment implements WeatherServiceCallback, PollutionServiceCallback
 {
     private ViewPager mPager;
     private PagerAdapter mPagerAdapter;
@@ -39,6 +41,8 @@ public class FirstMenu extends Fragment implements WeatherServiceCallback
     private GPSLocalisation GPS;
     private TaskParams taskParams;
     private WeatherService weatherService;
+    private PollutionService pollutionService;
+    private Parameters parameters;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -55,7 +59,7 @@ public class FirstMenu extends Fragment implements WeatherServiceCallback
 
         try
         {
-            callTask(this);
+            callTask(this, this);
         }
 
         catch (RuntimeException e)
@@ -74,6 +78,18 @@ public class FirstMenu extends Fragment implements WeatherServiceCallback
         mPager.setAdapter(mPagerAdapter);
 
         return view;
+    }
+
+    @Override
+    public void pollutionServiceSuccess(PollutionParameters pollutionParameters)
+    {
+        pollutionPage.updateLabels(pollutionParameters, parameters);
+    }
+
+    @Override
+    public void pollutionServiceFailure(Exception exception)
+    {
+        Toast.makeText(getContext(), exception.getMessage(), Toast.LENGTH_SHORT).show();
     }
 
     private class ScreenSlidePagerAdapter extends FragmentStatePagerAdapter
@@ -103,7 +119,8 @@ public class FirstMenu extends Fragment implements WeatherServiceCallback
         }
     }
 
-    public void callTask(final WeatherServiceCallback weatherCallback)
+    public void callTask(final WeatherServiceCallback weatherCallback,
+                         final PollutionServiceCallback pollutionCallback)
     {
         TimerTask doAsyncTask = new TimerTask()
         {
@@ -118,9 +135,11 @@ public class FirstMenu extends Fragment implements WeatherServiceCallback
                         try
                         {
                             weatherService = new WeatherService(weatherCallback);
+                            pollutionService = new PollutionService(pollutionCallback);
                             taskParams.setLat(GPS.getLatitude());
                             taskParams.setLon(GPS.getLongitude());
                             weatherService.execute(taskParams);
+                            pollutionService.execute(taskParams);
                         }
 
                         catch (Exception e)
@@ -140,6 +159,7 @@ public class FirstMenu extends Fragment implements WeatherServiceCallback
     {
         progressDialog.hide();
         forecastPage.updateLabels(parameters);
+        this.parameters = parameters;
     }
 
     @Override

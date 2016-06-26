@@ -4,7 +4,6 @@ import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.PagerAdapter;
@@ -22,8 +21,6 @@ import Engine.TaskParams;
 import Engine.WeatherService;
 import Pages.CityPage;
 import Pages.CityPollutionPage;
-import Pages.ForecastPage;
-import Pages.PollutionPage;
 import data.Parameters;
 
 /**

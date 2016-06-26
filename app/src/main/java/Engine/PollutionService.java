@@ -2,7 +2,7 @@ package Engine;
 
 import android.os.AsyncTask;
 
-import com.example.jakub.weathernow2.WeatherServiceCallback;
+import com.example.jakub.weathernow2.PollutionServiceCallback;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -15,16 +15,18 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 
-import data.Parameters;
+import pollutionData.PollutionParameters;
 
 /**
- * Created by Jakub on 13.06.2016.
+ * Created by Jakub on 2016-06-25.
  */
-public class WeatherService extends AsyncTask<TaskParams, Void, String> {
-    private WeatherServiceCallback callback;
+public class PollutionService extends AsyncTask<TaskParams, Void, String>
+{
+
+    private PollutionServiceCallback callback;
     private Exception exception;
 
-    public WeatherService(WeatherServiceCallback callback) {
+    public PollutionService(PollutionServiceCallback callback) {
         this.callback = callback;
     }
 
@@ -32,15 +34,14 @@ public class WeatherService extends AsyncTask<TaskParams, Void, String> {
     protected String doInBackground(TaskParams... params) {
         try
         {
-            URL url = new URL("http://api.openweathermap.org/data/2.5/weather?lat=" +
-                    params[0].getLat(true) + "&lon=" + params[0].getLon(true) +
-                    "&units=" + TaskParams.getUnits() +
-                    "&type=" + TaskParams.getAccuracy() + "&lang=" + TaskParams.getLanguage() +
-                    "&appid=10660a09a9fb335d72f576f7aa1bbe5b");
+            URL url = new URL("http://api.openweathermap.org/pollution/v1/co/" + params[0].getLat(false) +
+                    "," + params[0].getLon(false) + "/current.json?&appid=10660a09a9fb335d72f576f7aa1bbe5b");
 
             URLConnection connection = url.openConnection();
             InputStream inputStream = connection.getInputStream();
-            BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
+            InputStreamReader streamReader = new InputStreamReader(inputStream);
+            BufferedReader reader = new BufferedReader(streamReader);
+
             StringBuilder builder = new StringBuilder();
             String line;
 
@@ -51,14 +52,14 @@ public class WeatherService extends AsyncTask<TaskParams, Void, String> {
 
             return builder.toString();
         }
-
-        catch (MalformedURLException e) {
-            callback.serviceFailure(e);
+        catch (MalformedURLException e)
+        {
+            exception = e;
         }
 
         catch (IOException e)
         {
-            callback.serviceFailure(e);
+            exception = e;
         }
 
         return null;
@@ -69,19 +70,18 @@ public class WeatherService extends AsyncTask<TaskParams, Void, String> {
     {
         if (s == null && exception != null)
         {
-            callback.serviceFailure(exception);
+            callback.pollutionServiceFailure(exception);
             return;
         }
 
         try
         {
             JSONObject data = new JSONObject(s);
-            Parameters parameters = new Parameters();
+            PollutionParameters parameters = new PollutionParameters();
             parameters.poopulate(data);
-            callback.serviceSuccess(parameters);
+            callback.pollutionServiceSuccess(parameters);
         } catch (JSONException e) {
             e.printStackTrace();
         }
     }
 }
-
