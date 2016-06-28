@@ -34,8 +34,8 @@ public class PollutionService extends AsyncTask<TaskParams, Void, String>
     protected String doInBackground(TaskParams... params) {
         try
         {
-            URL url = new URL("http://api.openweathermap.org/pollution/v1/co/" + params[0].getLat(false) +
-                    "," + params[0].getLon(false) + "/current.json?&appid=10660a09a9fb335d72f576f7aa1bbe5b");
+            URL url = new URL("http://api.openweathermap.org/pollution/v1/co/" + params[0].getLatCoarse() +
+                    "," + params[0].getLonCoarse() + "/current.json?&appid=10660a09a9fb335d72f576f7aa1bbe5b");
 
             URLConnection connection = url.openConnection();
             InputStream inputStream = connection.getInputStream();

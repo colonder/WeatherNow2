@@ -14,6 +14,8 @@ public class TaskParams
     private static String language;
     private static String units;
     private static String accuracy;
+    private int cityID;
+
 
     public TaskParams(double lat, double lon, Context context)
     {
@@ -25,20 +27,24 @@ public class TaskParams
         accuracy = sharedPref.getString("accuracy", "");
     }
 
-    public double getLat(boolean accurate)
+    public double getLatFine()
     {
-        if(!accurate)
-            return (int)lat;
-
         return lat;
     }
 
-    public double getLon(boolean accurate)
+    public double getLonFine()
     {
-        if(!accurate)
-            return (int)lon;
-
         return lon;
+    }
+
+    public int getLatCoarse()
+    {
+        return ((int) lat);
+    }
+
+    public int getLonCoarse()
+    {
+        return ((int) lon);
     }
 
     public void setLat(double lat) {
@@ -71,5 +77,13 @@ public class TaskParams
 
     public static String getAccuracy() {
         return accuracy;
+    }
+
+    public int getCityID() {
+        return cityID;
+    }
+
+    public void setCityID(int cityID) {
+        this.cityID = cityID;
     }
 }

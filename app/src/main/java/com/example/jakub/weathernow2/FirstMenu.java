@@ -45,7 +45,8 @@ public class FirstMenu extends Fragment implements WeatherServiceCallback, Pollu
     private Parameters parameters;
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
 
         handler = new Handler();

@@ -24,7 +24,8 @@ public class WeatherService extends AsyncTask<TaskParams, Void, String> {
     private WeatherServiceCallback callback;
     private Exception exception;
 
-    public WeatherService(WeatherServiceCallback callback) {
+    public WeatherService(WeatherServiceCallback callback)
+    {
         this.callback = callback;
     }
 
@@ -33,7 +34,7 @@ public class WeatherService extends AsyncTask<TaskParams, Void, String> {
         try
         {
             URL url = new URL("http://api.openweathermap.org/data/2.5/weather?lat=" +
-                    params[0].getLat(true) + "&lon=" + params[0].getLon(true) +
+                    params[0].getLatFine() + "&lon=" + params[0].getLonFine() +
                     "&units=" + TaskParams.getUnits() +
                     "&type=" + TaskParams.getAccuracy() + "&lang=" + TaskParams.getLanguage() +
                     "&appid=10660a09a9fb335d72f576f7aa1bbe5b");
@@ -52,13 +53,14 @@ public class WeatherService extends AsyncTask<TaskParams, Void, String> {
             return builder.toString();
         }
 
-        catch (MalformedURLException e) {
-            callback.serviceFailure(e);
+        catch (MalformedURLException e)
+        {
+            exception = e;
         }
 
         catch (IOException e)
         {
-            callback.serviceFailure(e);
+            exception = e;
         }
 
         return null;
@@ -79,8 +81,16 @@ public class WeatherService extends AsyncTask<TaskParams, Void, String> {
             Parameters parameters = new Parameters();
             parameters.poopulate(data);
             callback.serviceSuccess(parameters);
-        } catch (JSONException e) {
-            e.printStackTrace();
+        }
+
+        catch (JSONException e)
+        {
+            callback.serviceFailure(e);
+        }
+
+        catch (NullPointerException e1)
+        {
+            callback.serviceFailure(e1);
         }
     }
 }
