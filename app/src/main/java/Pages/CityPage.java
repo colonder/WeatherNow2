@@ -1,8 +1,10 @@
 package Pages;
 
 import android.app.ProgressDialog;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -83,54 +85,14 @@ public class CityPage extends Fragment implements WeatherServiceCallback
         countrySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 
             @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
+            {
                 if (!initCountry) 
                 {
-                    String label = countrySpinner.getSelectedItem().toString();
+                    updateSpinners.execute();
+                }
 
-                    ProgressDialog dialog = new ProgressDialog(getActivity());
-                    dialog.setMessage("Refreshing list of available cities");
-                    dialog.show();
-
-                    jsonArray = new JSONArray();
-
-                    try {
-
-                        for (String line; (line = jsonReader.readLine()) != null; )
-                        {
-                            if (line.contains(label))
-                            {
-                                jsonArray.put(new JSONObject(line));
-                            }
-                        }
-
-
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-
-                    if (citiesList.size() != 0)
-                        cityAdapter.clear();
-
-                    for (int i = 0; i < jsonArray.length(); i++) {
-
-                        try
-                        {
-                            cityAdapter.add(jsonArray.getJSONObject(i).optString("name"));
-                        }
-
-                        catch (JSONException e)
-                        {
-                            e.printStackTrace();
-                        }
-                    }
-
-                    cityAdapter.notifyDataSetChanged();
-
-                    dialog.hide();
-                } else
+                else
                     initCountry = false;
             }
 
@@ -174,7 +136,6 @@ public class CityPage extends Fragment implements WeatherServiceCallback
 
         return view;
     }
-
 
     @Override
     public void serviceSuccess(Parameters parameters)
@@ -223,4 +184,83 @@ public class CityPage extends Fragment implements WeatherServiceCallback
 
         timer.schedule(doAsyncTask, 0, 5000);
     }
+
+    AsyncTask<Void, Void, Void> updateSpinners = new AsyncTask<Void, Void, Void>()
+    {
+        String label;
+        ProgressDialog dialog;
+        int progress = 0;
+
+        @Override
+        protected void onPreExecute()
+        {
+            label = countrySpinner.getSelectedItem().toString();
+            dialog = new ProgressDialog(getActivity());
+            dialog.setTitle(R.string.city_dialog_title);
+            dialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+            dialog.setMax(209579);
+            dialog.setProgressNumberFormat(null);
+            dialog.setProgress(0);
+            dialog.show();
+        }
+
+        @Override
+        protected Void doInBackground(Void... params)
+        {
+            jsonArray = new JSONArray();
+
+            try
+            {
+                String line;
+
+                while((line = jsonReader.readLine()) != null)
+                {
+                    if (line.contains(label))
+                    {
+                        jsonArray.put(new JSONObject(line));
+                        dialog.setMessage("Available: " + jsonArray.length());
+                    }
+
+                    progress++;
+                    dialog.setProgress(progress);
+                }
+
+            }
+
+            catch (IOException e)
+            {
+                e.printStackTrace();
+            }
+
+            catch (JSONException e)
+            {
+                e.printStackTrace();
+            }
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid)
+        {
+            if (citiesList.size() != 0)
+                cityAdapter.clear();
+
+            for (int i = 0; i < jsonArray.length(); i++) {
+
+                try
+                {
+                    cityAdapter.add(jsonArray.getJSONObject(i).optString("name"));
+                }
+
+                catch (JSONException e)
+                {
+                    e.printStackTrace();
+                }
+            }
+
+            cityAdapter.notifyDataSetChanged();
+            dialog.hide();
+        }
+    };
 }

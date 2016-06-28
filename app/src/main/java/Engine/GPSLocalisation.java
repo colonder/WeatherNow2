@@ -8,6 +8,7 @@ import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.widget.Toast;
@@ -88,21 +89,7 @@ public class GPSLocalisation implements LocationListener
 
         catch (NullPointerException e)
         {
-            AlertDialog.Builder builder = new AlertDialog.Builder(context);
-            builder.setMessage(R.string.location_failure).setTitle(R.string.location_dialog_title);
-            builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int id) {
-                    refresh();
-                    setLocationUpdates();
-                }
-            });
-            builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int id) {
-                    callback.inform("Location unknown");
-                }
-            });
-
-            builder.create().show();
+            exceptionTask.execute();
         }
     }
 
@@ -153,4 +140,30 @@ public class GPSLocalisation implements LocationListener
     {
         Toast.makeText(context, "Provider disabled", Toast.LENGTH_LONG).show();
     }
+
+    AsyncTask<Void, Void, Void> exceptionTask = new AsyncTask<Void, Void, Void>()
+    {
+        @Override
+        protected Void doInBackground(Void... params)
+        {
+            AlertDialog.Builder builder = new AlertDialog.Builder(context);
+            builder.setMessage(R.string.location_failure).setTitle(R.string.location_dialog_title);
+            builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int id) {
+                    refresh();
+                    setLocationUpdates();
+                }
+            });
+            builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int id) {
+                    callback.inform("Location unknown");
+                }
+            });
+
+            builder.create().show();
+
+
+            return null;
+        }
+    };
 }

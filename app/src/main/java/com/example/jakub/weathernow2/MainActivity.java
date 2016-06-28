@@ -32,7 +32,7 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
         initDrawerNavigation();
         fragmentManager = getSupportFragmentManager();
-        fragmentManager.beginTransaction().add(R.id.container, new FirstMenu()).commit();
+        fragmentManager.beginTransaction().add(R.id.container, new SecondMenu()).commit();
     }
 
     public void initDrawerNavigation()
@@ -75,7 +75,7 @@ public class MainActivity extends AppCompatActivity
                         break;
 
                     default:
-                        fragment = new FirstMenu();
+                        fragment = new SecondMenu();
                         fragmentManager.beginTransaction().replace(R.id.container, fragment).commit();
                         break;
                 }
