@@ -17,8 +17,9 @@ import data.Parameters;
 public class ForecastPage extends Fragment
 {
     private TextView pressureTextView, humidityTextView, tempMaxTextView, tempMinTextView,
-            groupDescTextView, descriptionTextView, cloudsTextView, rainTextView, snowTextView,
+            descriptionTextView, cloudsTextView, rainTextView, snowTextView,
             windSpeedTextView, windAngleTextView, locationTextView, temperatureTextView;
+    private static boolean detailed = false;
 
     @Override
     public void onCreate(Bundle savedInstanceState)
@@ -36,7 +37,6 @@ public class ForecastPage extends Fragment
         humidityTextView = (TextView) view.findViewById(R.id.humidityTextView);
         tempMaxTextView = (TextView) view.findViewById(R.id.tempMaxTextView);
         tempMinTextView = (TextView) view.findViewById(R.id.tempMinTextView);
-        groupDescTextView = (TextView) view.findViewById(R.id.groupDescTextView);
         descriptionTextView = (TextView) view.findViewById(R.id.descriptionTextView);
         cloudsTextView = (TextView) view.findViewById(R.id.cloudsTextView);
         rainTextView = (TextView) view.findViewById(R.id.rainTextView);
@@ -49,18 +49,36 @@ public class ForecastPage extends Fragment
 
     public void updateLabels(Parameters parameters)
     {
+        if(!detailed)
+        {
+            windAngleTextView.setVisibility(View.INVISIBLE);
+            rainTextView.setVisibility(View.INVISIBLE);
+            snowTextView.setVisibility(View.INVISIBLE);
+        }
+
+        else
+        {
+            windAngleTextView.setVisibility(View.VISIBLE);
+            rainTextView.setVisibility(View.VISIBLE);
+            snowTextView.setVisibility(View.VISIBLE);
+        }
+
         locationTextView.setText(parameters.getCityName());
-        temperatureTextView.setText("Temperature: " + parameters.getMain().getTemperature() + " C");
+        temperatureTextView.setText(parameters.getMain().getTemperature() + "º");
         pressureTextView.setText("Pressure: " + parameters.getMain().getPressure() + " hPa");
         humidityTextView.setText("Humidity: " + parameters.getMain().getHumidity() + "%");
-        tempMaxTextView.setText("Max temp: " + parameters.getMain().getTemp_max() + " C");
-        tempMinTextView.setText("Min temp: " + parameters.getMain().getTemp_min() + " C");
-        groupDescTextView.setText(parameters.getWeather().getGroupParameters());
+        tempMaxTextView.setText("Max temp: " + parameters.getMain().getTemp_max() + "º");
+        tempMinTextView.setText("Min temp: " + parameters.getMain().getTemp_min() + "º");
         descriptionTextView.setText(parameters.getWeather().getDescription());
-        cloudsTextView.setText("Cloudiness: " + parameters.getClouds().getCloudiness());
+        cloudsTextView.setText("Cloudiness: " + parameters.getClouds().getCloudiness() + "%");
         rainTextView.setText("Rain in last 3 hours: " + parameters.getRain().getLast3H());
         snowTextView.setText("Snow in last 3 hours: " + parameters.getSnow().getLast3H());
         windSpeedTextView.setText("Wind speed: " + parameters.getWind().getSpeed() + " m/s");
-        windAngleTextView.setText("Wind angle: " + parameters.getWind().getDegrees() + " degrees");
+        windAngleTextView.setText("Wind angle: " + parameters.getWind().getDegrees() + "º");
+    }
+
+    public static void setDetailed(boolean detailed)
+    {
+        ForecastPage.detailed = detailed;
     }
 }

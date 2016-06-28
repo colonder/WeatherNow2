@@ -7,6 +7,8 @@ import android.preference.PreferenceFragment;
 
 import com.example.jakub.weathernow2.R;
 
+import Pages.ForecastPage;
+
 /**
  * Created by Jakub on 18.06.2016.
  */
@@ -53,6 +55,7 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
         if(key.equals("detailed"))
         {
             Preference detailPref = findPreference(key);
+            ForecastPage.setDetailed(sharedPreferences.getBoolean(key, false));
         }
 
         if(key.equals("only_wifi"))

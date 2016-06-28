@@ -32,7 +32,8 @@ public class Main implements JSONPopulator {
         return pressure;
     }
 
-    public int getHumidity() {
+    public int getHumidity()
+    {
         return humidity;
     }
 

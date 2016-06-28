@@ -11,7 +11,8 @@
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:text="Select country"
-        android:id="@+id/textView3" />
+        android:id="@+id/textView3"
+        android:textColor="@color/background_material_light" />
 
     <Spinner
         android:layout_width="match_parent"
@@ -23,7 +24,8 @@
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:text="Select city"
-        android:id="@+id/textView4" />
+        android:id="@+id/textView4"
+        android:textColor="@color/background_material_light" />
 
     <Spinner
         android:layout_width="match_parent"

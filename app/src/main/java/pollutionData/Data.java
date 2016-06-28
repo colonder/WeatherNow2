@@ -4,6 +4,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.math.BigDecimal;
+
 /**
  * Created by Jakub on 2016-06-25.
  */
@@ -30,15 +32,18 @@ public class Data
         }
     }
 
-    public double getPrecision() {
+    public double getPrecision()
+    {
         return precision;
     }
 
-    public double getValue() {
+    public double getValue()
+    {
         return value;
     }
 
-    public double getPressure() {
+    public double getPressure()
+    {
         return pressure;
     }
 }

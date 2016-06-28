@@ -9,6 +9,10 @@ import android.widget.TextView;
 
 import com.example.jakub.weathernow2.R;
 
+import java.math.BigDecimal;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
+
 import data.Parameters;
 import pollutionData.PollutionParameters;
 
@@ -19,6 +23,8 @@ public class PollutionPage extends Fragment
 {
     private TextView density;
     private TextView mass;
+    private BigDecimal val;
+    private String tmp;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -38,10 +44,17 @@ public class PollutionPage extends Fragment
 
     public void updateLabels(PollutionParameters pollutionParameters, Parameters parameters)
     {
-        density.setText(String.valueOf(pollutionParameters.getData().getValue() *
+        val = new BigDecimal(pollutionParameters.getData().getValue() *
                 pollutionParameters.getData().getPressure() * 577.3 /
-                parameters.getMain().getTemperature()));
+                parameters.getMain().getTemperature()).setScale(5, BigDecimal.ROUND_UP);
 
-        mass.setText(String.valueOf(pollutionParameters.getData().getValue() * 1.66));
+        density.setText(String.valueOf(val));
+
+        /*val2 = new BigDecimal(pollutionParameters.getData().getValue() * 1.66).
+                setScale(2, BigDecimal.ROUND_UP);*/
+
+        tmp = String.valueOf(pollutionParameters.getData().getValue() * 1.66);
+
+        mass.setText(tmp.substring(0, 4) + tmp.substring(tmp.length() - 3));
     }
 }
