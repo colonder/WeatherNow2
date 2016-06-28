@@ -52,7 +52,7 @@ public class FirstMenu extends Fragment implements WeatherServiceCallback, Pollu
         handler = new Handler();
         timer = new Timer();
 
-        progressDialog = new ProgressDialog(getContext());
+        progressDialog = new ProgressDialog(getActivity());
         progressDialog.setMessage("Acquiring data...");
         progressDialog.show();
         GPS = new GPSLocalisation(getContext(), this);
@@ -135,7 +135,7 @@ public class FirstMenu extends Fragment implements WeatherServiceCallback, Pollu
                     {
                         try
                         {
-                            weatherService = new WeatherService(weatherCallback);
+                            weatherService = new WeatherService(weatherCallback, "GPS");
                             pollutionService = new PollutionService(pollutionCallback);
                             taskParams.setLat(GPS.getLatitude());
                             taskParams.setLon(GPS.getLongitude());
@@ -166,12 +166,12 @@ public class FirstMenu extends Fragment implements WeatherServiceCallback, Pollu
     @Override
     public void serviceFailure(Exception exception)
     {
-        Toast.makeText(getContext(), exception.getMessage(), Toast.LENGTH_SHORT).show();
+        Toast.makeText(getActivity(), exception.getMessage(), Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void inform(String message)
     {
-        Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
+        Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
     }
 }

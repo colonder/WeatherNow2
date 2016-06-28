@@ -23,45 +23,86 @@ import data.Parameters;
 public class WeatherService extends AsyncTask<TaskParams, Void, String> {
     private WeatherServiceCallback callback;
     private Exception exception;
+    private String mode;
 
-    public WeatherService(WeatherServiceCallback callback)
+    public WeatherService(WeatherServiceCallback callback, String mode)
     {
         this.callback = callback;
+        this.mode = mode;
     }
 
     @Override
-    protected String doInBackground(TaskParams... params) {
-        try
+    protected String doInBackground(TaskParams... params)
+    {
+        switch(mode)
         {
-            URL url = new URL("http://api.openweathermap.org/data/2.5/weather?lat=" +
-                    params[0].getLatFine() + "&lon=" + params[0].getLonFine() +
-                    "&units=" + TaskParams.getUnits() +
-                    "&type=" + TaskParams.getAccuracy() + "&lang=" + TaskParams.getLanguage() +
-                    "&appid=10660a09a9fb335d72f576f7aa1bbe5b");
+            case "GPS":
+                try
+                {
+                    URL url = new URL("http://api.openweathermap.org/data/2.5/weather?lat=" +
+                            params[0].getLatFine() + "&lon=" + params[0].getLonFine() +
+                            "&units=" + TaskParams.getUnits() +
+                            "&type=" + TaskParams.getAccuracy() + "&lang=" + TaskParams.getLanguage() +
+                            "&appid=10660a09a9fb335d72f576f7aa1bbe5b");
 
-            URLConnection connection = url.openConnection();
-            InputStream inputStream = connection.getInputStream();
-            BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
-            StringBuilder builder = new StringBuilder();
-            String line;
+                    URLConnection connection = url.openConnection();
+                    InputStream inputStream = connection.getInputStream();
+                    BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
+                    StringBuilder builder = new StringBuilder();
+                    String line;
 
-            while ((line = reader.readLine()) != null)
-            {
-                builder.append(line);
-            }
+                    while ((line = reader.readLine()) != null)
+                    {
+                        builder.append(line);
+                    }
 
-            return builder.toString();
+                    return builder.toString();
+                }
+
+                catch (MalformedURLException e)
+                {
+                    exception = e;
+                }
+
+                catch (IOException e)
+                {
+                    exception = e;
+                }
+                break;
+
+            case "CITY":
+                try
+                {
+                    URL url = new URL("http://api.openweathermap.org/data/2.5/weather?id=" +
+                            params[0].getCityID() + "&appid=10660a09a9fb335d72f576f7aa1bbe5b");
+
+                    URLConnection connection = url.openConnection();
+                    InputStream inputStream = connection.getInputStream();
+                    BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
+                    StringBuilder builder = new StringBuilder();
+                    String line;
+
+                    while ((line = reader.readLine()) != null)
+                    {
+                        builder.append(line);
+                    }
+
+                    return builder.toString();
+                }
+
+                catch (MalformedURLException e)
+                {
+                    exception = e;
+                }
+
+                catch (IOException e)
+                {
+                    exception = e;
+                }
+                break;
         }
 
-        catch (MalformedURLException e)
-        {
-            exception = e;
-        }
 
-        catch (IOException e)
-        {
-            exception = e;
-        }
 
         return null;
     }

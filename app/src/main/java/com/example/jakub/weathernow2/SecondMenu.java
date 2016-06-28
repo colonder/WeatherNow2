@@ -41,27 +41,9 @@ public class SecondMenu extends Fragment implements WeatherServiceCallback
     private WeatherService weatherService;
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
-
-        //handler = new Handler();
-        //timer = new Timer();
-
-        /*progressDialog = new ProgressDialog(getContext());
-        progressDialog.setMessage("Acquiring data...");
-        progressDialog.show();
-        GPS = new GPSLocalisation(getContext(), this);
-        taskParams = new TaskParams(GPS.getLatitude(), GPS.getLongitude(), getContext());
-
-        try
-        {
-            callTask(this);
-        }
-
-        catch (RuntimeException e)
-        {
-            serviceFailure(e);
-        }*/
     }
 
     @Override
@@ -101,38 +83,6 @@ public class SecondMenu extends Fragment implements WeatherServiceCallback
         {
             return NUM_PAGES;
         }
-    }
-
-    public void callTask(final WeatherServiceCallback weatherCallback)
-    {
-        TimerTask doAsyncTask = new TimerTask()
-        {
-            @Override
-            public void run()
-            {
-                handler.post(new Runnable()
-                {
-                    @Override
-                    public void run()
-                    {
-                        try
-                        {
-                            weatherService = new WeatherService(weatherCallback);
-                            taskParams.setLat(GPS.getLatitude());
-                            taskParams.setLon(GPS.getLongitude());
-                            weatherService.execute(taskParams);
-                        }
-
-                        catch (Exception e)
-                        {
-                            e.printStackTrace();
-                        }
-                    }
-                });
-            }
-        };
-
-        timer.schedule(doAsyncTask, 0, 5000);
     }
 
     @Override

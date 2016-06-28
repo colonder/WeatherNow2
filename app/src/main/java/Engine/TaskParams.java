@@ -27,6 +27,14 @@ public class TaskParams
         accuracy = sharedPref.getString("accuracy", "");
     }
 
+    public TaskParams(Context context)
+    {
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
+        language = sharedPref.getString("language", "");
+        units = sharedPref.getString("units", "");
+        accuracy = sharedPref.getString("accuracy", "");
+    }
+
     public double getLatFine()
     {
         return lat;
@@ -83,7 +91,8 @@ public class TaskParams
         return cityID;
     }
 
-    public void setCityID(int cityID) {
+    public void setCityID(int cityID)
+    {
         this.cityID = cityID;
     }
 }

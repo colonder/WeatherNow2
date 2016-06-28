@@ -117,7 +117,7 @@ public class ThirdMenu extends Fragment implements WeatherServiceCallback
                     {
                         try
                         {
-                            weatherService = new WeatherService(weatherCallback);
+                            //weatherService = new WeatherService(weatherCallback);
                             taskParams.setLat(GPS.getLatitude());
                             taskParams.setLon(GPS.getLongitude());
                             weatherService.execute(taskParams);
