@@ -74,7 +74,9 @@ public class WeatherService extends AsyncTask<TaskParams, Void, String> {
                 try
                 {
                     URL url = new URL("http://api.openweathermap.org/data/2.5/weather?id=" +
-                            params[0].getCityID() + "&appid=10660a09a9fb335d72f576f7aa1bbe5b");
+                            params[0].getCityID() + "&units=" + TaskParams.getUnits() +
+                            "&type=" + TaskParams.getAccuracy() + "&lang=" +
+                            TaskParams.getLanguage() + "&appid=10660a09a9fb335d72f576f7aa1bbe5b");
 
                     URLConnection connection = url.openConnection();
                     InputStream inputStream = connection.getInputStream();

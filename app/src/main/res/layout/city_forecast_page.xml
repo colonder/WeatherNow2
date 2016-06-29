@@ -20,6 +20,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/country_spinner"
+        android:entries="@array/country_labels"
         android:theme="@style/Widget.AppCompat.Spinner" />
 
     <TextView
@@ -37,4 +38,20 @@
         android:layout_height="wrap_content"
         android:id="@+id/city_spinner"
         android:theme="@style/Widget.AppCompat.Spinner" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:id="@+id/cityTempTextView"
+        android:textColor="@color/background_material_light"
+        android:textStyle="bold"
+        android:textSize="50dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:id="@+id/cityDescTextView"
+        android:textSize="20dp" />
 </LinearLayout>

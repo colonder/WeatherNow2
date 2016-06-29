@@ -36,14 +36,14 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
         {
             Preference unitPref = findPreference(key);
             unitPref.setSummary(sharedPreferences.getString(key, ""));
-            TaskParams.setUnits(sharedPreferences.getString(key, ""));
+            TaskParams.setUnits(sharedPreferences.getString(key, "metric"));
         }
 
         if(key.equals("accuracy"))
         {
             Preference accPref = findPreference(key);
             accPref.setSummary(sharedPreferences.getString(key, ""));
-            TaskParams.setAccuracy(sharedPreferences.getString(key, ""));
+            TaskParams.setAccuracy(sharedPreferences.getString(key, "accurate"));
         }
 
         if(key.equals("update_time"))

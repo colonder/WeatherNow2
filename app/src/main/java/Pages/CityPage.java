@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.jakub.weathernow2.R;
@@ -48,6 +49,9 @@ public class CityPage extends Fragment implements WeatherServiceCallback
     private TaskParams taskParams;
     private WeatherService weatherService;
     private JSONArray jsonArray;
+    private TextView cityTempTextView, cityDescTextView;
+    private String unit;
+    private String speed;
 
     @Override
     public void onCreate(Bundle savedInstanceState)
@@ -64,6 +68,8 @@ public class CityPage extends Fragment implements WeatherServiceCallback
     {
         ViewGroup view = (ViewGroup) inflater.inflate(R.layout.city_forecast_page, container, false);
 
+        cityTempTextView = (TextView) view.findViewById(R.id.cityTempTextView);
+        cityDescTextView = (TextView) view.findViewById(R.id.cityDescTextView);
         citySpinner = (Spinner) view.findViewById(R.id.city_spinner);
         countrySpinner = (Spinner) view.findViewById(R.id.country_spinner);
 
@@ -134,7 +140,26 @@ public class CityPage extends Fragment implements WeatherServiceCallback
     @Override
     public void serviceSuccess(Parameters parameters)
     {
-        Toast.makeText(getActivity(), "Service success", Toast.LENGTH_SHORT).show();
+        switch(TaskParams.getUnits())
+        {
+            case "metric":
+                unit = "C";
+                speed = "m/s";
+                break;
+
+            case "imperial":
+                unit = "F";
+                speed = "mph";
+                break;
+
+            case "kelvin":
+                unit = "K";
+                speed = "m/s";
+                break;
+        }
+        
+        cityTempTextView.setText(parameters.getMain().getTemperature() + "º" + unit);
+        cityDescTextView.setText(parameters.getWeather().getDescription());
     }
 
     @Override
@@ -191,7 +216,8 @@ public class CityPage extends Fragment implements WeatherServiceCallback
         @Override
         protected void onPreExecute()
         {
-            label = countrySpinner.getSelectedItem().toString();
+            label = getResources().getStringArray(R.array.country_val)[countrySpinner
+                    .getSelectedItemPosition()];
             dialog = new ProgressDialog(getActivity());
             dialog.setTitle(R.string.city_dialog_title);
             dialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
