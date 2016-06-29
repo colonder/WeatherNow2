@@ -38,11 +38,8 @@ import data.Parameters;
 public class CityPage extends Fragment implements WeatherServiceCallback
 {
     private ArrayList<String> citiesList;
-    private ArrayList<String> countryList;
     private Spinner citySpinner;
     private Spinner countrySpinner;
-    private JSONArray jsonArray;
-    private BufferedReader jsonReader;
     private ArrayAdapter<String> cityAdapter;
     private boolean initCountry = true;
     private boolean initCity = true;
@@ -50,16 +47,13 @@ public class CityPage extends Fragment implements WeatherServiceCallback
     private Timer timer;
     private TaskParams taskParams;
     private WeatherService weatherService;
+    private JSONArray jsonArray;
 
     @Override
     public void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
         citiesList = new ArrayList<>();
-        countryList = new ArrayList<>();
-        jsonReader = new BufferedReader(new InputStreamReader(this.getResources().
-                openRawResource(R.raw.city_list)));
-
         handler = new Handler();
         timer = new Timer();
         taskParams = new TaskParams(getActivity());
@@ -74,11 +68,11 @@ public class CityPage extends Fragment implements WeatherServiceCallback
         countrySpinner = (Spinner) view.findViewById(R.id.country_spinner);
 
         ArrayAdapter<CharSequence> countryAdapter = ArrayAdapter.createFromResource(getContext(),
-                R.array.country_labels, android.R.layout.simple_spinner_item);
+                R.array.country_labels, R.layout.spinner_item);
         countryAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         countrySpinner.setAdapter(countryAdapter);
 
-        cityAdapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_spinner_item, citiesList);
+        cityAdapter = new ArrayAdapter<String>(getContext(), R.layout.spinner_item, citiesList);
         cityAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         citySpinner.setAdapter(cityAdapter);
 
@@ -87,9 +81,9 @@ public class CityPage extends Fragment implements WeatherServiceCallback
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
             {
-                if (!initCountry) 
+                if (!initCountry)
                 {
-                    updateSpinners.execute();
+                    new SpinnerTask().execute();
                 }
 
                 else
@@ -185,11 +179,14 @@ public class CityPage extends Fragment implements WeatherServiceCallback
         timer.schedule(doAsyncTask, 0, 5000);
     }
 
-    AsyncTask<Void, Void, Void> updateSpinners = new AsyncTask<Void, Void, Void>()
+    private class SpinnerTask extends AsyncTask<Void, Void, Void>
     {
         String label;
         ProgressDialog dialog;
         int progress = 0;
+        String line;
+        BufferedReader jsonReader = new BufferedReader(new InputStreamReader(getResources().
+        openRawResource(R.raw.city_list)));
 
         @Override
         protected void onPreExecute()
@@ -211,7 +208,6 @@ public class CityPage extends Fragment implements WeatherServiceCallback
 
             try
             {
-                String line;
 
                 while((line = jsonReader.readLine()) != null)
                 {
@@ -237,6 +233,16 @@ public class CityPage extends Fragment implements WeatherServiceCallback
                 e.printStackTrace();
             }
 
+            try
+            {
+                jsonReader.close();
+            }
+
+            catch (IOException e)
+            {
+                e.printStackTrace();
+            }
+            
             return null;
         }
 
@@ -260,7 +266,18 @@ public class CityPage extends Fragment implements WeatherServiceCallback
             }
 
             cityAdapter.notifyDataSetChanged();
+
+            try
+            {
+                jsonReader.reset();
+            }
+
+            catch (IOException e)
+            {
+                e.printStackTrace();
+            }
+
             dialog.hide();
         }
-    };
+    }
 }

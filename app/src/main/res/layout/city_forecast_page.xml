@@ -10,25 +10,31 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="Select country"
+        android:text="Country"
         android:id="@+id/textView3"
-        android:textColor="@color/background_material_light" />
+        android:textColor="@color/background_material_light"
+        android:textStyle="bold"
+        android:textSize="30dp" />
 
     <Spinner
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/country_spinner" />
+        android:id="@+id/country_spinner"
+        android:theme="@style/Widget.AppCompat.Spinner" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="Select city"
+        android:text="City"
         android:id="@+id/textView4"
-        android:textColor="@color/background_material_light" />
+        android:textColor="@color/background_material_light"
+        android:textStyle="bold"
+        android:textSize="30dp" />
 
     <Spinner
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/city_spinner" />
+        android:id="@+id/city_spinner"
+        android:theme="@style/Widget.AppCompat.Spinner" />
 </LinearLayout>

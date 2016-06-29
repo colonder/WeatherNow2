@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import com.example.jakub.weathernow2.R;
 
+import Engine.TaskParams;
 import data.Parameters;
 
 /**
@@ -20,6 +21,7 @@ public class ForecastPage extends Fragment
             descriptionTextView, cloudsTextView, rainTextView, snowTextView,
             windSpeedTextView, windAngleTextView, locationTextView, temperatureTextView;
     private static boolean detailed = false;
+    private String unit, speed;
 
     @Override
     public void onCreate(Bundle savedInstanceState)
@@ -63,17 +65,37 @@ public class ForecastPage extends Fragment
             snowTextView.setVisibility(View.VISIBLE);
         }
 
+        switch(TaskParams.getUnits())
+        {
+            case "metric":
+                unit = "C";
+                speed = "m/s";
+                break;
+
+            case "imperial":
+                unit = "F";
+                speed = "mph";
+                break;
+
+            case "kelvin":
+                unit = "K";
+                speed = "m/s";
+                break;
+        }
+
         locationTextView.setText(parameters.getCityName());
-        temperatureTextView.setText(parameters.getMain().getTemperature() + "º");
+        temperatureTextView.setText(parameters.getMain().getTemperature() + "º" + unit);
         pressureTextView.setText("Pressure: " + parameters.getMain().getPressure() + " hPa");
         humidityTextView.setText("Humidity: " + parameters.getMain().getHumidity() + "%");
-        tempMaxTextView.setText("Max temp: " + parameters.getMain().getTemp_max() + "º");
-        tempMinTextView.setText("Min temp: " + parameters.getMain().getTemp_min() + "º");
+        tempMaxTextView.setText("Max temp: " + parameters.getMain().getTemp_max() + "º" + unit);
+        tempMinTextView.setText("Min temp: " + parameters.getMain().getTemp_min() + "º" + unit);
         descriptionTextView.setText(parameters.getWeather().getDescription());
         cloudsTextView.setText("Cloudiness: " + parameters.getClouds().getCloudiness() + "%");
         rainTextView.setText("Rain in last 3 hours: " + parameters.getRain().getLast3H());
         snowTextView.setText("Snow in last 3 hours: " + parameters.getSnow().getLast3H());
-        windSpeedTextView.setText("Wind speed: " + parameters.getWind().getSpeed() + " m/s");
+
+        windSpeedTextView.setText("Wind speed: " + parameters.getWind().getSpeed() + " " + speed);
+
         windAngleTextView.setText("Wind angle: " + parameters.getWind().getDegrees() + "º");
     }
 
