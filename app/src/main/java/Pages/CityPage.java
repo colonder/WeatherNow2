@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -38,12 +39,7 @@ import data.Parameters;
  */
 public class CityPage extends Fragment implements WeatherServiceCallback
 {
-    private ArrayList<String> citiesList;
-    private Spinner citySpinner;
-    private Spinner countrySpinner;
     private ArrayAdapter<String> cityAdapter;
-    private boolean initCountry = true;
-    private boolean initCity = true;
     private Handler handler;
     private Timer timer;
     private TaskParams taskParams;
@@ -52,12 +48,13 @@ public class CityPage extends Fragment implements WeatherServiceCallback
     private TextView cityTempTextView, cityDescTextView;
     private String unit;
     private String speed;
+    private ArrayAdapter<CharSequence> countryAdapter;
+    private AutoCompleteTextView searchCity, searchCountry;
 
     @Override
     public void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        citiesList = new ArrayList<>();
         handler = new Handler();
         timer = new Timer();
         taskParams = new TaskParams(getActivity());
@@ -70,67 +67,57 @@ public class CityPage extends Fragment implements WeatherServiceCallback
 
         cityTempTextView = (TextView) view.findViewById(R.id.cityTempTextView);
         cityDescTextView = (TextView) view.findViewById(R.id.cityDescTextView);
-        citySpinner = (Spinner) view.findViewById(R.id.city_spinner);
-        countrySpinner = (Spinner) view.findViewById(R.id.country_spinner);
+        searchCountry = (AutoCompleteTextView) view.findViewById(R.id.searchCountryTextView);
+        searchCity = (AutoCompleteTextView) view.findViewById(R.id.searchCityTextView);
 
-        ArrayAdapter<CharSequence> countryAdapter = ArrayAdapter.createFromResource(getContext(),
-                R.array.country_labels, R.layout.spinner_item);
-        countryAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        countrySpinner.setAdapter(countryAdapter);
+        countryAdapter = ArrayAdapter.createFromResource(getContext(), R.array.country_labels,
+                android.R.layout.simple_dropdown_item_1line);
 
-        cityAdapter = new ArrayAdapter<String>(getContext(), R.layout.spinner_item, citiesList);
-        cityAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        citySpinner.setAdapter(cityAdapter);
+        searchCountry.setAdapter(countryAdapter);
 
-        countrySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        cityAdapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_dropdown_item_1line);
 
+        searchCity.setAdapter(cityAdapter);
+
+        searchCountry.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
-            {
-                if (!initCountry)
-                {
-                    new SpinnerTask().execute();
-                }
-
-                else
-                    initCountry = false;
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent)
-            {
-
+            public void onClick(View v) {
+                searchCountry.showDropDown();
             }
         });
 
-        citySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
+        searchCountry.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                new SpinnerTask(countryAdapter.getPosition((CharSequence) parent.
+                        getItemAtPosition(position))).execute();
+            }
+        });
+
+        searchCity.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                searchCity.showDropDown();
+            }
+        });
+
+        searchCity.setOnItemClickListener(new AdapterView.OnItemClickListener()
         {
             @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id)
             {
-                if(!initCity)
+                searchCity.showDropDown();
+                try
                 {
-                    try
-                    {
-                        taskParams.setCityID(jsonArray.getJSONObject(citySpinner.
-                                getSelectedItemPosition()).optInt("_id"));
-                        callTask(CityPage.this);
-                    }
-
-                    catch (JSONException e)
-                    {
-                        e.printStackTrace();
-                    }
+                    taskParams.setCityID(jsonArray.getJSONObject(cityAdapter.getPosition((String)
+                            parent.getItemAtPosition(position))).optInt("_id"));
+                    callTask(CityPage.this);
                 }
-                
-                else
-                    initCity = false;
-            }
 
-            @Override
-            public void onNothingSelected(AdapterView<?> parent)
-            {
-
+                catch (JSONException e)
+                {
+                    e.printStackTrace();
+                }
             }
         });
 
@@ -158,7 +145,7 @@ public class CityPage extends Fragment implements WeatherServiceCallback
                 break;
         }
         
-        cityTempTextView.setText(parameters.getMain().getTemperature() + "º" + unit);
+        cityTempTextView.setText(parameters.getMain().getTemperature() + " º" + unit);
         cityDescTextView.setText(parameters.getWeather().getDescription());
     }
 
@@ -210,14 +197,18 @@ public class CityPage extends Fragment implements WeatherServiceCallback
         ProgressDialog dialog;
         int progress = 0;
         String line;
-        BufferedReader jsonReader = new BufferedReader(new InputStreamReader(getResources().
-        openRawResource(R.raw.city_list)));
+        BufferedReader jsonReader;
+
+        public SpinnerTask(int selectedItemPosition)
+        {
+            label = getResources().getStringArray(R.array.country_val)[selectedItemPosition];
+            jsonReader = new BufferedReader(new InputStreamReader(getResources().
+                openRawResource(R.raw.city_list)));
+        }
 
         @Override
         protected void onPreExecute()
         {
-            label = getResources().getStringArray(R.array.country_val)[countrySpinner
-                    .getSelectedItemPosition()];
             dialog = new ProgressDialog(getActivity());
             dialog.setTitle(R.string.city_dialog_title);
             dialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
@@ -275,7 +266,7 @@ public class CityPage extends Fragment implements WeatherServiceCallback
         @Override
         protected void onPostExecute(Void aVoid)
         {
-            if (citiesList.size() != 0)
+            if (cityAdapter.getCount() != 0)
                 cityAdapter.clear();
 
             for (int i = 0; i < jsonArray.length(); i++) {
@@ -292,16 +283,6 @@ public class CityPage extends Fragment implements WeatherServiceCallback
             }
 
             cityAdapter.notifyDataSetChanged();
-
-            try
-            {
-                jsonReader.reset();
-            }
-
-            catch (IOException e)
-            {
-                e.printStackTrace();
-            }
 
             dialog.hide();
         }

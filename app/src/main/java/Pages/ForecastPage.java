@@ -84,11 +84,11 @@ public class ForecastPage extends Fragment
         }
 
         locationTextView.setText(parameters.getCityName());
-        temperatureTextView.setText(parameters.getMain().getTemperature() + "º" + unit);
+        temperatureTextView.setText(parameters.getMain().getTemperature() + " º" + unit);
         pressureTextView.setText("Pressure: " + parameters.getMain().getPressure() + " hPa");
         humidityTextView.setText("Humidity: " + parameters.getMain().getHumidity() + "%");
-        tempMaxTextView.setText("Max temp: " + parameters.getMain().getTemp_max() + "º" + unit);
-        tempMinTextView.setText("Min temp: " + parameters.getMain().getTemp_min() + "º" + unit);
+        tempMaxTextView.setText("Max temp: " + parameters.getMain().getTemp_max() + " º" + unit);
+        tempMinTextView.setText("Min temp: " + parameters.getMain().getTemp_min() + " º" + unit);
         descriptionTextView.setText(parameters.getWeather().getDescription());
         cloudsTextView.setText("Cloudiness: " + parameters.getClouds().getCloudiness() + "%");
         rainTextView.setText("Rain in last 3 hours: " + parameters.getRain().getLast3H());

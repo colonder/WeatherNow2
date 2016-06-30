@@ -16,12 +16,11 @@
         android:textStyle="bold"
         android:textSize="30dp" />
 
-    <Spinner
+    <AutoCompleteTextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/country_spinner"
-        android:entries="@array/country_labels"
-        android:theme="@style/Widget.AppCompat.Spinner" />
+        android:id="@+id/searchCountryTextView"
+        android:textColor="@color/background_material_light" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -33,11 +32,12 @@
         android:textStyle="bold"
         android:textSize="30dp" />
 
-    <Spinner
+    <AutoCompleteTextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/city_spinner"
-        android:theme="@style/Widget.AppCompat.Spinner" />
+        android:id="@+id/searchCityTextView"
+        android:layout_gravity="center_horizontal"
+        android:textColor="@color/background_material_light" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -46,12 +46,15 @@
         android:id="@+id/cityTempTextView"
         android:textColor="@color/background_material_light"
         android:textStyle="bold"
-        android:textSize="50dp" />
+        android:textSize="50dp"
+        android:layout_gravity="center_horizontal" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:id="@+id/cityDescTextView"
-        android:textSize="20dp" />
+        android:textSize="20dp"
+        android:textColor="@color/background_material_light"
+        android:layout_gravity="center_horizontal"/>
 </LinearLayout>
