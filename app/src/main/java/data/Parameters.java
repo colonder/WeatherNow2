@@ -7,7 +7,7 @@ import org.json.JSONObject;
  */
 public class Parameters implements JSONPopulator {
 
-    private Coordinations coordinations;
+    private Coordination coordination;
     private Weather weather;
     private Main main;
     private Wind wind;
@@ -22,7 +22,7 @@ public class Parameters implements JSONPopulator {
     @Override
     public void poopulate(JSONObject jsonObject)
     {
-        coordinations = new Coordinations();
+        coordination = new Coordination();
         weather = new Weather(jsonObject.optString("weather"));
         main = new Main();
         wind = new Wind();
@@ -31,7 +31,7 @@ public class Parameters implements JSONPopulator {
         snow = new Snow();
         sys = new Sys();
 
-        coordinations.poopulate(jsonObject.optJSONObject("coord"));
+        coordination.poopulate(jsonObject.optJSONObject("coord"));
         main.poopulate(jsonObject.optJSONObject("main"));
         wind.poopulate(jsonObject.optJSONObject("wind"));
         clouds.poopulate(jsonObject.optJSONObject("clouds"));
@@ -62,8 +62,8 @@ public class Parameters implements JSONPopulator {
         cityName = jsonObject.optString("name");
     }
 
-    public Coordinations getCoordinations() {
-        return coordinations;
+    public Coordination getCoordination() {
+        return coordination;
     }
 
     public Weather getWeather() {

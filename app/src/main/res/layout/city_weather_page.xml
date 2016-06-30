@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="Country"
+        android:id="@+id/textView3"
+        android:textColor="@color/background_material_light"
+        android:textStyle="bold"
+        android:textSize="30dp" />
+
+    <AutoCompleteTextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/searchCountryTextView"
+        android:textColor="@color/background_material_light" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="City"
+        android:id="@+id/textView4"
+        android:textColor="@color/background_material_light"
+        android:textStyle="bold"
+        android:textSize="30dp" />
+
+    <AutoCompleteTextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/searchCityTextView"
+        android:layout_gravity="center_horizontal"
+        android:textColor="@color/background_material_light" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:id="@+id/cityTempTextView"
+        android:textColor="@color/background_material_light"
+        android:textStyle="bold"
+        android:textSize="50dp"
+        android:layout_gravity="center_horizontal" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:id="@+id/cityDescTextView"
+        android:textSize="20dp"
+        android:textColor="@color/background_material_light"
+        android:layout_gravity="center_horizontal"/>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/cityScrollView"
+        android:layout_gravity="center_horizontal" >
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/cityPressureTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="@color/background_material_light" />
+
+            <TextView
+                android:id="@+id/cityHumidityTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="@color/background_material_light" />
+
+            <TextView
+                android:id="@+id/cityTempMaxTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="@color/background_material_light" />
+
+            <TextView
+                android:id="@+id/cityTempMinTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="@color/background_material_light" />
+
+            <TextView
+                android:id="@+id/cityCloudsTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="@color/background_material_light" />
+
+            <TextView
+                android:id="@+id/cityWindSpeedTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="@color/background_material_light" />
+
+            <TextView
+                android:id="@+id/cityWindAngleTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="@color/background_material_light" />
+
+            <TextView
+                android:id="@+id/cityRainTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="@color/background_material_light" />
+
+            <TextView
+                android:id="@+id/citySnowTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="@color/background_material_light" />
+
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

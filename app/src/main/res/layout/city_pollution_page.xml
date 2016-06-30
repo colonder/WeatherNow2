@@ -1,6 +1,57 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginBottom="@dimen/activity_vertical_margin"
+    android:layout_marginEnd="@dimen/activity_horizontal_margin"
+    android:layout_marginStart="@dimen/activity_horizontal_margin"
+    android:orientation="vertical">
 
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Carbon monoxide"
+        android:id="@+id/textView6"
+        android:layout_gravity="center_horizontal"
+        android:textColor="@color/background_material_light"
+        android:textIsSelectable="false"
+        android:textSize="30dp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="density [μg/m3]"
+        android:id="@+id/textView7"
+        android:layout_gravity="center_horizontal"
+        android:textColor="@color/background_material_light" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:id="@+id/cityDensityValTextView"
+        android:layout_gravity="center_horizontal"
+        android:textColor="@color/background_material_light" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="mass mixing ratio [μg/g]"
+        android:id="@+id/textView8"
+        android:layout_gravity="center_horizontal"
+        android:textColor="@color/background_material_light" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:id="@+id/cityMassTextView"
+        android:layout_gravity="center_horizontal"
+        android:textColor="@color/background_material_light" />
 </LinearLayout>

@@ -4,7 +4,6 @@ import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.Looper;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,10 +11,11 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
-import android.widget.Spinner;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.jakub.weathernow2.PollutionServiceCallback;
 import com.example.jakub.weathernow2.R;
 import com.example.jakub.weathernow2.WeatherServiceCallback;
 
@@ -26,18 +26,19 @@ import org.json.JSONObject;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import Engine.PollutionService;
 import Engine.TaskParams;
 import Engine.WeatherService;
 import data.Parameters;
+import pollutionData.PollutionParameters;
 
 /**
  * Created by Jakub on 22.06.2016.
  */
-public class CityPage extends Fragment implements WeatherServiceCallback
+public class CityPage extends Fragment implements WeatherServiceCallback, PollutionServiceCallback
 {
     private ArrayAdapter<String> cityAdapter;
     private Handler handler;
@@ -50,7 +51,16 @@ public class CityPage extends Fragment implements WeatherServiceCallback
     private String speed;
     private ArrayAdapter<CharSequence> countryAdapter;
     private AutoCompleteTextView searchCity, searchCountry;
-    private int i;
+    private TextView pressureTextView, humidityTextView, tempMaxTextView, tempMinTextView,
+            cloudsTextView, rainTextView, snowTextView, windSpeedTextView, windAngleTextView;
+    private static boolean detailed;
+    private PollutionService pollutionService;
+    private Parameters parameters;
+
+    public static void setDetailed(boolean detailed)
+    {
+        CityPage.detailed = detailed;
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState)
@@ -64,10 +74,21 @@ public class CityPage extends Fragment implements WeatherServiceCallback
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
-        ViewGroup view = (ViewGroup) inflater.inflate(R.layout.city_forecast_page, container, false);
+        ViewGroup view = (ViewGroup) inflater.inflate(R.layout.city_weather_page, container, false);
 
         cityTempTextView = (TextView) view.findViewById(R.id.cityTempTextView);
         cityDescTextView = (TextView) view.findViewById(R.id.cityDescTextView);
+
+        pressureTextView = (TextView) view.findViewById(R.id.cityPressureTextView);
+        humidityTextView = (TextView) view.findViewById(R.id.cityHumidityTextView);
+        tempMaxTextView = (TextView) view.findViewById(R.id.cityTempMaxTextView);
+        tempMinTextView = (TextView) view.findViewById(R.id.cityTempMinTextView);
+        cloudsTextView = (TextView) view.findViewById(R.id.cityCloudsTextView);
+        rainTextView = (TextView) view.findViewById(R.id.cityRainTextView);
+        snowTextView = (TextView) view.findViewById(R.id.citySnowTextView);
+        windSpeedTextView = (TextView) view.findViewById(R.id.cityWindSpeedTextView);
+        windAngleTextView = (TextView) view.findViewById(R.id.cityWindAngleTextView);
+
         searchCountry = (AutoCompleteTextView) view.findViewById(R.id.searchCountryTextView);
         searchCity = (AutoCompleteTextView) view.findViewById(R.id.searchCityTextView);
 
@@ -112,7 +133,7 @@ public class CityPage extends Fragment implements WeatherServiceCallback
                 {
                     taskParams.setCityID(jsonArray.getJSONObject(cityAdapter.getPosition((String)
                             parent.getItemAtPosition(position))).optInt("_id"));
-                    callTask(CityPage.this);
+                    callTask(CityPage.this, CityPage.this);
                 }
 
                 catch (JSONException e)
@@ -128,6 +149,24 @@ public class CityPage extends Fragment implements WeatherServiceCallback
     @Override
     public void serviceSuccess(Parameters parameters)
     {
+        taskParams.setLon(parameters.getCoordination().getLongitude());
+        taskParams.setLat(parameters.getCoordination().getLatitude());
+        this.parameters = parameters;
+
+        if(!detailed)
+        {
+            windAngleTextView.setVisibility(View.INVISIBLE);
+            rainTextView.setVisibility(View.INVISIBLE);
+            snowTextView.setVisibility(View.INVISIBLE);
+        }
+
+        else
+        {
+            windAngleTextView.setVisibility(View.VISIBLE);
+            rainTextView.setVisibility(View.VISIBLE);
+            snowTextView.setVisibility(View.VISIBLE);
+        }
+
         switch(TaskParams.getUnits())
         {
             case "metric":
@@ -148,6 +187,16 @@ public class CityPage extends Fragment implements WeatherServiceCallback
         
         cityTempTextView.setText(parameters.getMain().getTemperature() + " º" + unit);
         cityDescTextView.setText(parameters.getWeather().getDescription());
+
+        pressureTextView.setText("Pressure: " + parameters.getMain().getPressure() + " hPa");
+        humidityTextView.setText("Humidity: " + parameters.getMain().getHumidity() + "%");
+        tempMaxTextView.setText("Max temp: " + parameters.getMain().getTemp_max() + " º" + unit);
+        tempMinTextView.setText("Min temp: " + parameters.getMain().getTemp_min() + " º" + unit);
+        cloudsTextView.setText("Cloudiness: " + parameters.getClouds().getCloudiness() + "%");
+        rainTextView.setText("Rain in last 3 hours: " + parameters.getRain().getLast3H());
+        snowTextView.setText("Snow in last 3 hours: " + parameters.getSnow().getLast3H());
+        windSpeedTextView.setText("Wind speed: " + parameters.getWind().getSpeed() + " " + speed);
+        windAngleTextView.setText("Wind angle: " + parameters.getWind().getDegrees() + "º");
     }
 
     @Override
@@ -162,7 +211,8 @@ public class CityPage extends Fragment implements WeatherServiceCallback
         Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
     }
 
-    public void callTask(final WeatherServiceCallback weatherCallback)
+    public void callTask(final WeatherServiceCallback weatherCallback,
+                         final PollutionServiceCallback pollutionCallback)
     {
         TimerTask doAsyncTask = new TimerTask()
         {
@@ -177,7 +227,9 @@ public class CityPage extends Fragment implements WeatherServiceCallback
                         try
                         {
                             weatherService = new WeatherService(weatherCallback, "CITY");
+                            pollutionService = new PollutionService(pollutionCallback);
                             weatherService.execute(taskParams);
+                            pollutionService.execute(taskParams);
                         }
 
                         catch (Exception e)
@@ -190,6 +242,18 @@ public class CityPage extends Fragment implements WeatherServiceCallback
         };
 
         timer.schedule(doAsyncTask, 0, 5000);
+    }
+
+    @Override
+    public void pollutionServiceSuccess(PollutionParameters pollutionParameters)
+    {
+        CityPollutionPage.updateLabels(pollutionParameters, parameters);
+    }
+
+    @Override
+    public void pollutionServiceFailure(Exception exception)
+    {
+        Toast.makeText(getActivity(), exception.getMessage(), Toast.LENGTH_SHORT).show();
     }
 
     private class SpinnerTask extends AsyncTask<Void, Void, Void>

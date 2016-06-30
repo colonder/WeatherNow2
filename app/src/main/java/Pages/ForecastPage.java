@@ -32,7 +32,7 @@ public class ForecastPage extends Fragment
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
-        ViewGroup view = (ViewGroup) inflater.inflate(R.layout.forecast_layout, container, false);
+        ViewGroup view = (ViewGroup) inflater.inflate(R.layout.weather_layout, container, false);
         locationTextView = (TextView) view.findViewById(R.id.locationTextView);
         temperatureTextView = (TextView) view.findViewById(R.id.temperatureTextView);
         pressureTextView = (TextView) view.findViewById(R.id.pressureTextView);

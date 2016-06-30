@@ -50,9 +50,6 @@ public class PollutionPage extends Fragment
 
         density.setText(String.valueOf(val));
 
-        /*val2 = new BigDecimal(pollutionParameters.getData().getValue() * 1.66).
-                setScale(2, BigDecimal.ROUND_UP);*/
-
         tmp = String.valueOf(pollutionParameters.getData().getValue() * 1.66);
 
         mass.setText(tmp.substring(0, 4) + tmp.substring(tmp.length() - 3));

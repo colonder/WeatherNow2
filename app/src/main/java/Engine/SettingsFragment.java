@@ -7,6 +7,7 @@ import android.preference.PreferenceFragment;
 
 import com.example.jakub.weathernow2.R;
 
+import Pages.CityPage;
 import Pages.ForecastPage;
 
 /**
@@ -56,6 +57,7 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
         {
             Preference detailPref = findPreference(key);
             ForecastPage.setDetailed(sharedPreferences.getBoolean(key, false));
+            CityPage.setDetailed(sharedPreferences.getBoolean(key, false));
         }
 
         if(key.equals("only_wifi"))

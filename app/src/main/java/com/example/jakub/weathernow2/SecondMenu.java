@@ -26,19 +26,13 @@ import data.Parameters;
 /**
  * Created by Jakub on 22.06.2016.
  */
-public class SecondMenu extends Fragment implements WeatherServiceCallback
+public class SecondMenu extends Fragment
 {
     private ViewPager mPager;
     private PagerAdapter mPagerAdapter;
     private static final int NUM_PAGES = 2;
     private CityPollutionPage cityPollutionPage;
     private CityPage cityPage;
-    private Handler handler;
-    private Timer timer;
-    private ProgressDialog progressDialog;
-    private GPSLocalisation GPS;
-    private TaskParams taskParams;
-    private WeatherService weatherService;
 
     @Override
     public void onCreate(Bundle savedInstanceState)
@@ -83,23 +77,5 @@ public class SecondMenu extends Fragment implements WeatherServiceCallback
         {
             return NUM_PAGES;
         }
-    }
-
-    @Override
-    public void serviceSuccess(Parameters parameters)
-    {
-        progressDialog.hide();
-    }
-
-    @Override
-    public void serviceFailure(Exception exception)
-    {
-        Toast.makeText(getContext(), exception.getMessage(), Toast.LENGTH_SHORT).show();
-    }
-
-    @Override
-    public void inform(String message)
-    {
-        Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
     }
 }

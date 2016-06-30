@@ -24,6 +24,7 @@ public class WeatherService extends AsyncTask<TaskParams, Void, String> {
     private WeatherServiceCallback callback;
     private Exception exception;
     private String mode;
+    private URL url;
 
     public WeatherService(WeatherServiceCallback callback, String mode)
     {
@@ -39,32 +40,14 @@ public class WeatherService extends AsyncTask<TaskParams, Void, String> {
             case "GPS":
                 try
                 {
-                    URL url = new URL("http://api.openweathermap.org/data/2.5/weather?lat=" +
+                    url = new URL("http://api.openweathermap.org/data/2.5/weather?lat=" +
                             params[0].getLatFine() + "&lon=" + params[0].getLonFine() +
                             "&units=" + TaskParams.getUnits() +
                             "&type=" + TaskParams.getAccuracy() + "&lang=" + TaskParams.getLanguage() +
                             "&appid=10660a09a9fb335d72f576f7aa1bbe5b");
-
-                    URLConnection connection = url.openConnection();
-                    InputStream inputStream = connection.getInputStream();
-                    BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
-                    StringBuilder builder = new StringBuilder();
-                    String line;
-
-                    while ((line = reader.readLine()) != null)
-                    {
-                        builder.append(line);
-                    }
-
-                    return builder.toString();
                 }
 
                 catch (MalformedURLException e)
-                {
-                    exception = e;
-                }
-
-                catch (IOException e)
                 {
                     exception = e;
                 }
@@ -73,38 +56,39 @@ public class WeatherService extends AsyncTask<TaskParams, Void, String> {
             case "CITY":
                 try
                 {
-                    URL url = new URL("http://api.openweathermap.org/data/2.5/weather?id=" +
+                    url = new URL("http://api.openweathermap.org/data/2.5/weather?id=" +
                             params[0].getCityID() + "&units=" + TaskParams.getUnits() +
                             "&type=" + TaskParams.getAccuracy() + "&lang=" +
                             TaskParams.getLanguage() + "&appid=10660a09a9fb335d72f576f7aa1bbe5b");
-
-                    URLConnection connection = url.openConnection();
-                    InputStream inputStream = connection.getInputStream();
-                    BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
-                    StringBuilder builder = new StringBuilder();
-                    String line;
-
-                    while ((line = reader.readLine()) != null)
-                    {
-                        builder.append(line);
-                    }
-
-                    return builder.toString();
                 }
 
                 catch (MalformedURLException e)
                 {
                     exception = e;
                 }
-
-                catch (IOException e)
-                {
-                    exception = e;
-                }
                 break;
         }
 
+        try
+        {
+            URLConnection connection = url.openConnection();
+            InputStream inputStream = connection.getInputStream();
+            BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
+            StringBuilder builder = new StringBuilder();
+            String line;
 
+            while ((line = reader.readLine()) != null)
+            {
+                builder.append(line);
+            }
+
+            return builder.toString();
+        }
+
+        catch (IOException e)
+        {
+            exception = e;
+        }
 
         return null;
     }
