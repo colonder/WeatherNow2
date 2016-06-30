@@ -64,11 +64,6 @@ public class MainActivity extends AppCompatActivity
                         fragmentManager.beginTransaction().replace(R.id.container, fragment).commit();
                         break;
 
-                    case R.id.nav_provided_gps:
-                        fragment = new ThirdMenu();
-                        fragmentManager.beginTransaction().replace(R.id.container, fragment).commit();
-                        break;
-
                     case R.id.nav_settings:
                         Intent i = new Intent(getApplicationContext(), SettingsActivity.class);
                         startActivity(i);

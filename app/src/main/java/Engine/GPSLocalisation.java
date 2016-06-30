@@ -78,7 +78,7 @@ public class GPSLocalisation implements LocationListener
     {
         try
         {
-            locationManager.requestLocationUpdates(5000, 1, criteria, this, null);
+            locationManager.requestLocationUpdates(2700000, 1000, criteria, this, null);
             setLatitude();
             setLongitude();
         }

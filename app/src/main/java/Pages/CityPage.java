@@ -11,7 +11,6 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
-import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -241,7 +240,7 @@ public class CityPage extends Fragment implements WeatherServiceCallback, Pollut
             }
         };
 
-        timer.schedule(doAsyncTask, 0, 5000);
+        timer.schedule(doAsyncTask, 0, 1800000);
     }
 
     @Override

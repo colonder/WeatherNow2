@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
 
+import com.example.jakub.weathernow2.FirstMenu;
 import com.example.jakub.weathernow2.R;
 
 import Pages.CityPage;
@@ -15,6 +16,9 @@ import Pages.ForecastPage;
  */
 public class SettingsFragment extends PreferenceFragment implements SharedPreferences.OnSharedPreferenceChangeListener
 {
+    private FirstMenu firstMenu;
+    private CityPage cityPage;
+
     @Override
     public void onCreate(Bundle savedInstanceState)
     {
@@ -30,7 +34,7 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
         {
             // Set summary to be the user-description for the selected value
             Preference langPref = findPreference(key);
-            TaskParams.setLanguage(sharedPreferences.getString(key, ""));
+            TaskParams.setLanguage(sharedPreferences.getString(key, "english"));
         }
 
         if(key.equals("units"))
@@ -47,22 +51,11 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
             TaskParams.setAccuracy(sharedPreferences.getString(key, "accurate"));
         }
 
-        if(key.equals("update_time"))
-        {
-            Preference upTimePref = findPreference(key);
-            upTimePref.setSummary(sharedPreferences.getString(key, ""));
-        }
-
         if(key.equals("detailed"))
         {
             Preference detailPref = findPreference(key);
             ForecastPage.setDetailed(sharedPreferences.getBoolean(key, false));
             CityPage.setDetailed(sharedPreferences.getBoolean(key, false));
-        }
-
-        if(key.equals("only_wifi"))
-        {
-            Preference wifiPref = findPreference(key);
         }
 
         sharedPreferences.registerOnSharedPreferenceChangeListener(this);

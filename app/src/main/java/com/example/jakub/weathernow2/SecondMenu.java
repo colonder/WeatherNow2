@@ -1,8 +1,6 @@
 package com.example.jakub.weathernow2;
 
-import android.app.ProgressDialog;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
@@ -11,17 +9,9 @@ import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
-import java.util.Timer;
-import java.util.TimerTask;
-
-import Engine.GPSLocalisation;
-import Engine.TaskParams;
-import Engine.WeatherService;
 import Pages.CityPage;
 import Pages.CityPollutionPage;
-import data.Parameters;
 
 /**
  * Created by Jakub on 22.06.2016.

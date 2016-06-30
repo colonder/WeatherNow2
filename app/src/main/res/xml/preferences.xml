@@ -29,23 +29,9 @@
         android:entryValues="@array/language_short"
         />
 
-    <ListPreference
-        android:key="update_time"
-        android:title="Update interval"
-        android:defaultValue="5"
-        android:dialogTitle="Select update time"
-        android:entries="@array/update_time"
-        android:entryValues="@array/update_time"
-        />
-
     <CheckBoxPreference
         android:key="detailed"
         android:title="Detailed info"
         android:defaultValue="true" />
-
-    <CheckBoxPreference
-        android:key="only_wifi"
-        android:title="Download data only while on WiFi"
-        android:defaultValue="false" />
 
 </PreferenceScreen>

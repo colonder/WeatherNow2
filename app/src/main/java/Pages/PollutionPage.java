@@ -10,8 +10,6 @@ import android.widget.TextView;
 import com.example.jakub.weathernow2.R;
 
 import java.math.BigDecimal;
-import java.text.DecimalFormat;
-import java.text.NumberFormat;
 
 import data.Parameters;
 import pollutionData.PollutionParameters;

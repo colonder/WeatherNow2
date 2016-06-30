@@ -7,16 +7,12 @@
             <menu>
                 <item
                     android:id="@+id/nav_dyn_gps"
-                    android:icon="@drawable/ic_action_location_found"
+                    android:icon="@drawable/ic_action_web_site"
                     android:title="Dynamic coordinates" />
                 <item
                     android:id="@+id/nav_city"
                     android:icon="@drawable/ic_action_place"
                     android:title="City" />
-                <item
-                    android:id="@+id/nav_provided_gps"
-                    android:icon="@drawable/ic_action_web_site"
-                    android:title="Passive coordinates" />
             </menu>
         </item>
     </group>

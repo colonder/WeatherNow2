@@ -152,7 +152,7 @@ public class FirstMenu extends Fragment implements WeatherServiceCallback, Pollu
             }
         };
 
-        timer.schedule(doAsyncTask, 0, 5000);
+        timer.schedule(doAsyncTask, 0, 1800000);
     }
 
     @Override
