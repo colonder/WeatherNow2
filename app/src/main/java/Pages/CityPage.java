@@ -50,6 +50,7 @@ public class CityPage extends Fragment implements WeatherServiceCallback
     private String speed;
     private ArrayAdapter<CharSequence> countryAdapter;
     private AutoCompleteTextView searchCity, searchCountry;
+    private int i;
 
     @Override
     public void onCreate(Bundle savedInstanceState)
@@ -88,9 +89,9 @@ public class CityPage extends Fragment implements WeatherServiceCallback
 
         searchCountry.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                new SpinnerTask(countryAdapter.getPosition((CharSequence) parent.
-                        getItemAtPosition(position))).execute();
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id)
+            {
+                new SpinnerTask((String) parent.getItemAtPosition(position)).execute();
             }
         });
 
@@ -199,9 +200,16 @@ public class CityPage extends Fragment implements WeatherServiceCallback
         String line;
         BufferedReader jsonReader;
 
-        public SpinnerTask(int selectedItemPosition)
+        public SpinnerTask(String selectedItem)
         {
-            label = getResources().getStringArray(R.array.country_val)[selectedItemPosition];
+            for(int i = 0; i < getResources().getStringArray(R.array.country_labels).length; i++)
+            {
+                if(getResources().getStringArray(R.array.country_labels)[i].equals(selectedItem))
+                {
+                    label = getResources().getStringArray(R.array.country_val)[i];
+                }
+            }
+
             jsonReader = new BufferedReader(new InputStreamReader(getResources().
                 openRawResource(R.raw.city_list)));
         }
