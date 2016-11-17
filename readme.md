@@ -1,0 +1,3 @@
+Program ten został wykonany na platformę Android jako projekt w ramach zajęć na uczelni. Wykorzystuje on OpenWeatherMap API oraz Google Maps. Głównymi funkcjonalnościami jest podawanie prognozy pogody dla dynamicznie pobieranej lokalizacji GPS lub możliwość pobrania prognozy dla wybranej stacji pomiarowej dostępnej z bazy danych OpenWeatherMap. 
+
+This program was made as an academic project on Android platform. It uses OpenWeatherMap API and Google Maps. Its main purpose is to show weather forecast either for dynamically acquired GPS position or for a specific meteo station from OpenWeatherMap database.
